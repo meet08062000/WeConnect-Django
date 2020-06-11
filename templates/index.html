@@ -36,6 +36,7 @@
             <div class="col">
                 <div class="container p-5 m-5">
                     <form action="/login" class="login_form" method="POST">
+                        {% csrf_token %}
                         <h3 class="pt-5 mt-5">Login</h3>
                         <div class="form-group">
                             <label for="username">Username</label>
@@ -44,7 +45,7 @@
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input placeholder="Password" class="form-control" type="text" name="password">
+                            <input placeholder="Password" class="form-control" type="password" name="password">
                         </div>
 
                         <div class="form-group">
@@ -53,20 +54,21 @@
 
                         <p>Don't have an account? <a href="#" class="signup_btn">Signup</a></p>
                     </form>
-                    <form action="/signup" class="signup_form" method="POST">
+                    <form action="/register" class="signup_form" method="POST">
+                        {% csrf_token %}
                         <h3 class="pt-3">Signup</h3>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="fname">First name</label>
-                                    <input placeholder="First name" class="form-control" type="text" name="fname">
+                                    <label for="first_name">First name</label>
+                                    <input placeholder="First name" class="form-control" type="text" name="first_name">
                                 </div>
                             </div>
 
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="lname">Last name</label>
-                                    <input placeholder="Last name" class="form-control" type="text" name="lname">
+                                    <label for="last_name">Last name</label>
+                                    <input placeholder="Last name" class="form-control" type="text" name="last_name">
                                 </div>
                             </div>
                         </div>
@@ -83,7 +85,12 @@
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input placeholder="Password" class="form-control" type="text" name="password">
+                            <input placeholder="Password" class="form-control" type="password" name="password1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Re-enter Password</label>
+                            <input placeholder="Password" class="form-control" type="password" name="password2">
                         </div>
 
                         <div class="form-group">
@@ -97,12 +104,12 @@
         </div>
     </div>
     <script type="text/javascript">
-        $('.signup_btn').on('click', function(e) {
+        $('.signup_btn').on('click', function (e) {
             $('.login_form').css('display', 'none');
             $('.signup_form').css('display', 'inline')
         });
 
-        $('.login_btn').on('click', function(e) {
+        $('.login_btn').on('click', function (e) {
             $('.signup_form').css('display', 'none');
             $('.login_form').css('display', 'inline')
         });

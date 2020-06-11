@@ -7,14 +7,21 @@
 
 {% block content %}
 <h3>Posts</h3>
-<div class="card p-4 m-5">
-    
+<div class="card-columns ml-5 mt-3">
     {% for post in posts %}
-    <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-    <div class="card-body">
-        <h5 class="card-title">{{post.title}}</h5>
-        <p class="card-text">{{post.desc}}</p>
-        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    <div class="card border-primary mb-3">
+        <div class="card-header">
+            <small class="text-muted">{{user.firstname}}</small>
+        </div>
+        <img class="card-img-top" src="{{post.image.url}}" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.desc}}</p>
+        </div>
+        <div class="card-footer">
+            <i class="fa fa-thumbs-up"></i>
+
+        </div>
     </div>
     {% endfor %}
 </div>

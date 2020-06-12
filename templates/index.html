@@ -24,10 +24,18 @@
 		.login_form {
 			display: inline;
 		}
+
+		body {
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-size: cover;
+				  }
+				 
 	</style>
 </head>
 
-<body>
+<body background='{% static "bg.jpg" %}'>
 	<div class="container">
 		<div class="row">
 			<div class="col">
@@ -38,13 +46,14 @@
 		</div>
 		<div class="row">
 			<div class="col">
-
+				<img src='{% static "homelogo.png" %}' style="margin-top: 25%; margin-left:8%">
+				<img src='{% static "bg_img.jpeg" %}' style="margin-top: 0%">
 			</div>
 			<div class="col">
 				<div class="container p-5 m-5">
 					<form action="/login" class="login_form" method="POST">
 						{% csrf_token %}
-						<h3 class="pt-5 mt-5">Login</h3>
+						<h3 class="mt-5 pt-5">Login</h3>
 						<div class="form-group">
 							<label for="username">Username</label>
 							<input placeholder="Username" class="form-control" type="text" name="username">

@@ -9,6 +9,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     desc = models.TextField()
     image = models.ImageField(upload_to='post_images')
+    loc = models.CharField(max_length=100, default='')
     timestamp = models.DateTimeField(default=timezone.now)
     tags = models.CharField(max_length=10)
     author = models.ForeignKey(User, on_delete=models.CASCADE)

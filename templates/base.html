@@ -21,6 +21,13 @@
 </head>
 
 <style>
+    .nav-sticky{
+        position: sticky;
+        top: 0;
+        z-index: 1;
+
+
+    }
 
     .border-bottom {
         border-width:3px !important;
@@ -48,7 +55,7 @@
 </style>
 
 <body style='background-color: #DAE0E6;'>
-    <nav class="navbar navbar-expand-lg border-bottom border-dark" style='background-color: #ffffff;'>
+    <nav class="navbar navbar-expand-lg border-bottom border-dark nav-sticky" style='background-color: #ffffff;'>
         <a class="navbar-brand" href="#">
             <img src="{%static 'mainlogo.jpg' %}" width='200' height="36" alt="">
         </a>
@@ -59,24 +66,29 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active p-2">
-                <button type="button" class="btn btn-dark rounded-0"><i class="fa fa-home" aria-hidden="true"> Home</i></button>
+                <a href='/dashboard'><button type="button" class="btn btn-dark rounded-0"><i class="fa fa-home" aria-hidden="true"> Home</i></button></a>
             </li>
             <li class="nav-item p-2">
                 <button type="button" class="btn btn-dark rounded-0"><i class="fa fa-envelope"> Messages</i></button>
             </li>
             <li class="nav-item p-2">
-                <button type="button" class="btn btn-dark rounded-0"><i class="fa fa-id-card"> Profile</i></button>
+                <a href='/dashboard/post'><button type="button" class="btn btn-dark rounded-0" ><i class="fa fa-newspaper"> Post</i></button></a>
             </li>
-            <li class="nav-item p-2">
-                <button type="button" class="btn btn-dark rounded-0"><i class="fa fa-cog"> Settings</i></button>
+            <li class="nav-item dropdown p-2">
+                <a class="btn btn-dark rounded-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-id-card"> </i> Profile
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Profile Page</a>
+                  <a class="dropdown-item" href="#">Settings</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/logout"><i class="fa fa-sign-out-alt"> Logout</i></a>
+                </div>
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2 rounded-0" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-light border-dark my-2 my-sm-0 rounded-0" type="submit">Search</button>
-                <a href='acccounts/logout'>
-                    <button type="button" class="btn btn-dark rounded-0 ml-3"><i class="fa fa-sign-out-alt"> </i></button>
-                </a>
           </form>
         </div>
     </nav>

@@ -6,9 +6,11 @@
 
 {% block content %}
 <div class='container' style='width: 50%; margin-top: 6%'>
-    <h1><center style='font-family: "Roboto Slab", Serif'>Post</center></h1>
+    <h1>
+        <center style='font-family: "Roboto Slab", Serif'>Post</center>
+    </h1>
     <br>
-    <form action='post' method='post'>
+    <form action='/dashboard/post' method='post' enctype="multipart/form-data">
 
         {% csrf_token %}
 
@@ -17,12 +19,12 @@
             <input type='text' name='title' placeholder='Title' class='form-control'>
         </div>
         <div class='form-group'>
-            <label for='description'>Description: </label>
-            <textarea type='text' name='description' placeholder='Description' class='form-control'></textarea>
+            <label for='desc'>Description: </label>
+            <textarea type='text' name='desc' placeholder='Description' class='form-control'></textarea>
         </div>
         <div class='form-group'>
             <label for='image'>Image: </label>
-            <input type='file' name='image' placeholder='Image' >
+            <input type='file' name='image' placeholder='Image'>
         </div>
         <div class='form-group'>
             <label for='loc'>Location: </label>
@@ -36,4 +38,4 @@
             <button type='submit' class='btn btn-dark'>Submit</button>
         </div>
     </form>
-{% endblock %}
+    {% endblock %}

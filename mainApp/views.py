@@ -30,13 +30,13 @@ def post(request):
         return render(request, 'post.html')
 
 
-def profilepage(request):
+def userprofile(request):
     if (request.method.lower() == 'post'):
         pass
     else:
         logged_in_user_posts = Post.objects.filter(author=request.user)
         posts_count = logged_in_user_posts.count()
-        return render(request, 'profilepage.html', {'userposts': logged_in_user_posts, 'posts_count': posts_count})
+        return render(request, 'userprofile.html', {'userposts': logged_in_user_posts, 'posts_count': posts_count})
 
 
 def like(request, post_id):
@@ -67,7 +67,7 @@ def profile(request, user_id):
         user_posts_count = Post.objects.filter(author=user).count()
         return render(request, 'profile.html', {'user': user, 'userposts': user_posts, 'posts_count': user_posts, 'posts_count': user_posts_count})
     else:
-        return redirect('/app/profilepage')
+        return redirect('/app/userprofile')
 
 
 def follows(request, user_id):

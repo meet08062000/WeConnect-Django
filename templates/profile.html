@@ -19,9 +19,12 @@
         </div>
         <div class='col'>
             <h3 class='d-inline mr-3'>{{user.username}}</h3>
-            <button class='btn btn-dark rounded-0 mb-1' type='submit'>Follow+</button><br><br>
-            <h5 class='d-inline mr-3'>Followers: {{user.followers}}</h5>
-            <h5 class='d-inline mr-3'>Following: {{user.following}}</h5>
+            <form action='/app/follows/{{user.id}}' method="POST">
+                {% csrf_token %}
+                <button class='btn btn-dark rounded-0 mb-1' type='submit'>Follows</button><br><br>
+            </form>
+            <h5 class='d-inline mr-3'>Followsers: {{user.followers}}</h5>
+            <h5 class='d-inline mr-3'>Followsing: {{user.following}}</h5>
             <h5 class='d-inline mr-3'>Posts: {{posts_count}}</h5>
             <hr style='border-color: black'>
             <h4 class='d-inline mr-3'><b style='font-weight: 500'>{{user.username}}</b></h4><br>

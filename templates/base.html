@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,37 +22,36 @@
 </head>
 
 <style>
-    .nav-sticky{
+    .nav-sticky {
         position: sticky;
         top: 0;
-        z-index: 1;
+        z-index: 3;
 
 
     }
 
     .border-bottom {
-        border-width:3px !important;
+        border-width: 3px !important;
     }
 
     .btn-dark:hover {
-        color:black  !important;
-        background-color:white !important;
+        color: black !important;
+        background-color: white !important;
     }
 
     .btn-light:hover {
-        color: white  !important;
+        color: white !important;
         background-color: black !important;
     }
 
-      .navbar-default .navbar-toggle.collapsed {
+    .navbar-default .navbar-toggle.collapsed {
         border-color: black;
     }
 
-      .navbar .navbar-toggler-icon {
+    .navbar .navbar-toggler-icon {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(41, 43, 44, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
         border-color: #292b2c;
     }
-
 </style>
 
 <body style='background-color: #DAE0E6;'>
@@ -59,41 +59,46 @@
         <a class="navbar-brand" href="/app">
             <img src="{%static 'mainlogo.jpg' %}" width='200' height="36" alt="">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon" style='color: black;'></span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style='color: black;'></span>
         </button>
-      
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active p-2">
-                <a href='/app'><button type="button" class="btn btn-dark rounded-0"><i class="fa fa-home" aria-hidden="true"> Home</i></button></a>
-            </li>
-            <li class="nav-item p-2">
-                <button type="button" class="btn btn-dark rounded-0"><i class="fa fa-envelope"> Messages</i></button>
-            </li>
-            <li class="nav-item p-2">
-                <a href='/app/post'><button type="button" class="btn btn-dark rounded-0" ><i class="fa fa-newspaper"> Post</i></button></a>
-            </li>
-            <li class="nav-item dropdown p-2">
-                <a class="btn btn-dark rounded-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-id-card"> </i> Profile
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="/app/profilepage">Profile Page</a>
-                  <a class="dropdown-item" href="#">Settings</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/logout"><i class="fa fa-sign-out-alt"> Logout</i></a>
-                </div>
-            </li>
-          </ul>
-          <form class="form-inline my-2 my-lg-0">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active p-2">
+                    <a href='/app'><button type="button" class="btn btn-dark rounded-0"><i class="fa fa-home"
+                                aria-hidden="true"> Home</i></button></a>
+                </li>
+                <li class="nav-item p-2">
+                    <button type="button" class="btn btn-dark rounded-0"><i class="fa fa-envelope">
+                            Messages</i></button>
+                </li>
+                <li class="nav-item p-2">
+                    <a href='/app/post'><button type="button" class="btn btn-dark rounded-0"><i class="fa fa-newspaper">
+                                Post</i></button></a>
+                </li>
+                <li class="nav-item dropdown p-2">
+                    <a class="btn btn-dark rounded-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-id-card"> </i> Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/app/profilepage">Profile Page</a>
+                        <a class="dropdown-item" href="#">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout"><i class="fa fa-sign-out-alt"> Logout</i></a>
+                    </div>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2 rounded-0" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-light border-dark my-2 my-sm-0 rounded-0" type="submit">Search</button>
-          </form>
+            </form>
         </div>
     </nav>
     <div class="w3-sidebar w3-bar-block w3-card" style="width:25%;right:0;">
-        <h3 class="w3-bar-item" style='background-color: #292b2c; color: white; text-align: center;'>Followers</h3>
+        <h3 class="w3-bar-item" style='background-color: #292b2c; color: white; text-align: center;'>Followsers</h3>
         <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>Link 1</a>
         <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>Link 2</a>
         <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>Link 3</a>

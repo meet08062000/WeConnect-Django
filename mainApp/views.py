@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import Post
+from .models import Likes
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 
@@ -25,6 +26,42 @@ def post(request):
         post.tags = request.POST['tags']
         post.author_id = request.user.id
         post.save()
-        redirect('/dashboard')
+        return redirect('/app')
     else:
         return render(request, 'post.html')
+
+
+def profilepage(request):
+    if (request.method == 'POST'):
+        pass
+    else:
+        logged_in_user_posts = Post.objects.filter(author=request.user)
+        posts_count = logged_in_user_posts.count()
+        return render(request, 'profilepage.html', {'userposts': logged_in_user_posts, 'posts_count': posts_count})
+
+def like(request, post_id):
+    
+    like_count = Likes.objects.filter(user_id = request.user.id, post_id = post_id).count()
+    post= Post.objects.filter(id=post_id).get()  
+    if(like_count != 0):
+        post.likes -= 1
+        post.save()
+        like = Likes.objects.filter(user_id = request.user.id, post_id = post_id).get()
+        like.delete()
+    else:
+        like = Likes()
+        like.user_id = request.user.id
+        like.post_id = post_id
+        post.likes += 1
+        post.save()
+        like.save()
+    return redirect('/app')
+
+def profile(request, user_id):
+    if(user_id != request.user.id):
+        user = User.objects.filter(id=user_id).get()
+        user_posts = Post.objects.filter(author = user)
+        user_posts_count = Post.objects.filter(author = user).count()
+        return render(request, 'profile.html', {'user': user, 'userposts': user_posts, 'posts_count': user_posts, 'posts_count': user_posts_count})
+    else:
+        return redirect('/app/profilepage')

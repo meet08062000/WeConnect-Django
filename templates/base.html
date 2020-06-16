@@ -56,7 +56,7 @@
 
 <body style='background-color: #DAE0E6;'>
     <nav class="navbar navbar-expand-lg border-bottom border-dark nav-sticky" style='background-color: #ffffff;'>
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/app">
             <img src="{%static 'mainlogo.jpg' %}" width='200' height="36" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,20 +66,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active p-2">
-                <a href='/dashboard'><button type="button" class="btn btn-dark rounded-0"><i class="fa fa-home" aria-hidden="true"> Home</i></button></a>
+                <a href='/app'><button type="button" class="btn btn-dark rounded-0"><i class="fa fa-home" aria-hidden="true"> Home</i></button></a>
             </li>
             <li class="nav-item p-2">
                 <button type="button" class="btn btn-dark rounded-0"><i class="fa fa-envelope"> Messages</i></button>
             </li>
             <li class="nav-item p-2">
-                <a href='/dashboard/post'><button type="button" class="btn btn-dark rounded-0" ><i class="fa fa-newspaper"> Post</i></button></a>
+                <a href='/app/post'><button type="button" class="btn btn-dark rounded-0" ><i class="fa fa-newspaper"> Post</i></button></a>
             </li>
             <li class="nav-item dropdown p-2">
                 <a class="btn btn-dark rounded-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-id-card"> </i> Profile
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Profile Page</a>
+                  <a class="dropdown-item" href="/app/profilepage">Profile Page</a>
                   <a class="dropdown-item" href="#">Settings</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/logout"><i class="fa fa-sign-out-alt"> Logout</i></a>

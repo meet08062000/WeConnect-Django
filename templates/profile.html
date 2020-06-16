@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>User Profile</title>
+{% endblock %}
+
+{% block content %}
+
+
+<div class='container' style='width: 70%; margin-top: 6%'>
+    <h1>
+        <center style='font-family: "Roboto Slab", Serif'>User Profile</center>
+    </h1>
+    <br>
+    <div class='row'>
+        <div class="col text-center">
+            <img src='{% static "bg_img.jpeg" %}' class="rounded-circle mb-2" alt="100x100" width="180" height="180"
+                style='border-radius: 50%'><br><br>
+        </div>
+        <div class='col'>
+            <h3 class='d-inline mr-3'>{{user.username}}</h3>
+            <button class='btn btn-dark rounded-0 mb-1' type='submit'>Follow+</button><br><br>
+            <h5 class='d-inline mr-3'>Followers: {{user.followers}}</h5>
+            <h5 class='d-inline mr-3'>Following: {{user.following}}</h5>
+            <h5 class='d-inline mr-3'>Posts: {{posts_count}}</h5>
+            <hr style='border-color: black'>
+            <h4 class='d-inline mr-3'><b style='font-weight: 500'>{{user.username}}</b></h4><br>
+            <h5 class='d-inline mr-3'>{{user.desc}} </h5>
+        </div>
+    </div>
+    <hr style='border-color: black'>
+</div>
+
+
+<div class="card-deck mb-3" style='margin-left: 4%;'>
+    {% for userpost in userposts%}
+    <div class='card'>
+        <div class="card-header ">
+            <div class="row mb-1">
+                <div class='col-sm'>
+                    <div class="text" style='font-size: 0.9rem'>{{userpost.loc}}</div>
+                </div>
+            </div>
+        </div>
+        <img class="card-img-top" src="{{userpost.image.url}}" alt="Card image cap">
+        <hr class='divider'>
+        <div class="card-body">
+            <h5 class="card-title" style='font-weight: 500'>{{userpost.title}}</h5>
+            <h6 class='mb-5'>
+                <p class="card-text">{{userpost.desc}}</p>
+            </h6>
+            <div class='row'>
+                <div class='col-sm'>
+                    <h4 class='d-inline'><button class='far fa-thumbs-up'
+                            style='text-decoration:none'>{{userpost.likes}}</a>
+                    </h4>
+                    <h4 class='d-inline pl-1'><button class='far fa-comment' style='text-decoration:none'></button></h4>
+                    <h4 class='d-inline pl-1'><button class='far fa-bookmark' style='text-decoration:none'></button>
+                    </h4>
+                </div>
+                <div class="col-sm">
+                    <p class="card-text float-right pr"><small class="text-muted">{{userpost.timestamp}}</small></p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Comment" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-dark " type="button">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

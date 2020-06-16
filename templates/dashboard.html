@@ -38,10 +38,12 @@
         </h6>
         <div class='row'>
             <div class='col-sm'>
-                <h4 class='d-inline'><a href='' class='far fa-thumbs-up' style='text-decoration:none'>{{post.likes}}</a>
-                </h4>
-                <h4 class='d-inline pl-1'><a href='' class='far fa-comment' style='text-decoration:none'></a></h4>
-                <h4 class='d-inline pl-1'><a href='' class='far fa-bookmark' style='text-decoration:none'></a></h4>
+                <form action="/app/{{post.id}}" method="POST">
+                    {% csrf_token %}
+                    <h4 class='d-inline'><button class='far fa-thumbs-up' style='text-decoration:none'>{{post.likes}}<button></h4>
+                </form>
+                <h4 class='d-inline pl-1'><button class='far fa-comment' style='text-decoration:none'><button></h4>
+                <h4 class='d-inline pl-1'><button class='far fa-bookmark' style='text-decoration:none'><button></h4>
             </div>
             <div class="col-sm">
                 <p class="card-text float-right pr"><small class="text-muted">{{post.timestamp}}</small></p>

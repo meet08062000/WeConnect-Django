@@ -7,7 +7,7 @@ from django.contrib import messages
 
 def index(request):
     if(request.user.is_authenticated):
-        return redirect ('/dashboard')
+        return redirect ('/app')
     return render(request, 'index.html')
 
 
@@ -18,7 +18,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if(user is not None):
             auth.login(request, user)
-            return redirect('/dashboard')
+            return redirect('/app')
         else:
             messages.info(request, 'Invalid credentials')
             return redirect('/')

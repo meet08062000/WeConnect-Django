@@ -2,7 +2,6 @@
 /WeConnect/settings.py
 /.vscode
 db.sqlite3
-/myvenv
 # Django #
 *.log
 *.pot

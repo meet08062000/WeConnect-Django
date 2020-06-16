@@ -36,7 +36,7 @@ def userprofile(request):
     else:
         logged_in_user_posts = Post.objects.filter(author=request.user)
         posts_count = logged_in_user_posts.count()
-        return render(request, 'userprofile.html', {'userposts': logged_in_user_posts, 'posts_count': posts_count})
+        return render(request, 'userprofile.html', {'profile': request.user, 'userposts': logged_in_user_posts, 'posts_count': posts_count})
 
 
 def like(request, post_id):

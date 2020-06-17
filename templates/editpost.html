@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Post</title>
+{% endblock %}
+
+{% block content %}
+<div class='container' style='width: 50%; margin-top: 6%'>
+    <h1>
+        <center style='font-family: "Roboto Slab", Serif'>Post</center>
+    </h1>
+    <br>
+    <form action='/app/post/{{post.id}}' method='post' enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class='form-group'>
+            <label for='title'>Title: </label>
+            <input type='text' name='title' placeholder='Title' class='form-control' value={{post.title}}>
+        </div>
+        <div class='form-group'>
+            <label for='desc'>Description: </label>
+            <textarea type='text' name='desc' placeholder='Description' class='form-control'
+                value={{post.desc}}></textarea>
+        </div>
+        <div class='form-group'>
+            <label for='image'>Image: </label>
+            <input type='file' name='image' placeholder='Image'>
+        </div>
+        <div class='form-group'>
+            <label for='loc'>Location: </label>
+            <input type='text' name='loc' placeholder='Location' class='form-control' value={{post.loc}}>
+        </div>
+        <div class='form-group'>
+            <label for='tags'>Tags: </label>
+            <input type='text' name='tags' placeholder='Tags' class='form-control' value={{post.tags}}>
+        </div>
+        <div class='form-group'>
+            <button type='submit' class='btn btn-dark'>Submit</button>
+        </div>
+    </form>
+    {% endblock %}

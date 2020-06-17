@@ -2,45 +2,60 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .models import Post, Likes, Follows
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
 
 def dashboard(request):
-    print(request.user)
     if(request.user.is_authenticated):
-        posts = Post.objects.all()
-        return render(request, 'dashboard.html', {'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True)})
+        following = Follows.objects.filter(follower_id=request.user.id).all()
+        following_id = [x.receiver_id for x in following]
+        following_id += [request.user.id]
+        posts = []
+        likes = list(Likes.objects.filter(user_id=request.user.id))
+        liked_post_ids = [x.post_id for x in likes]
+        for x in following_id:
+            posts += Post.objects.filter(author_id=x)
+        return render(request, 'dashboard.html', {'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True), 'user_id': request.user.id, 'liked_post_ids': liked_post_ids})
     else:
         return redirect('/')
 
 
-def post(request):
-    if (request.method == 'POST'):
-        post = Post()
-        post.title = request.POST['title']
-        post.desc = request.POST['desc']
-        post.image = request.FILES['image']
-        post.loc = request.POST['loc']
-        post.tags = request.POST['tags']
-        post.author_id = request.user.id
-        post.save()
-        return redirect('/app')
+def createpost(request):
+    if(request.user.is_authenticated):
+        if (request.method == 'POST'):
+            post = Post()
+            post.title = request.POST['title']
+            post.desc = request.POST['desc']
+            post.image = request.FILES['image']
+            post.loc = request.POST['loc']
+            post.tags = request.POST['tags']
+            post.author_id = request.user.id
+            post.save()
+            return redirect('/app')
+        else:
+            return render(request, 'createpost.html')
     else:
-        return render(request, 'post.html')
+        return redirect('/')
 
 
 def userprofile(request):
-    if (request.method.lower() == 'post'):
-        pass
+    if(request.user.is_authenticated):
+        if (request.method.lower() == 'post'):
+            pass
+        else:
+            logged_in_user_posts = Post.objects.filter(author=request.user)
+            posts_count = logged_in_user_posts.count()
+            likes = list(Likes.objects.filter(user_id=request.user.id))
+            liked_post_ids = [x.post_id for x in likes]
+            return render(request, 'userprofile.html', {'profile': request.user, 'userposts': logged_in_user_posts, 'posts_count': posts_count, 'liked_post_ids': liked_post_ids})
     else:
-        logged_in_user_posts = Post.objects.filter(author=request.user)
-        posts_count = logged_in_user_posts.count()
-        return render(request, 'userprofile.html', {'profile': request.user, 'userposts': logged_in_user_posts, 'posts_count': posts_count})
+        return redirect('/')
 
 
 def like(request, post_id):
-    if(request.method.lower() == "post"):
+    if(request.user.is_authenticated):
         like_count = Likes.objects.filter(
             user_id=request.user.id, post_id=post_id).count()
         post = Post.objects.filter(id=post_id).get()
@@ -50,6 +65,7 @@ def like(request, post_id):
             like = Likes.objects.filter(
                 user_id=request.user.id, post_id=post_id).get()
             like.delete()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             like = Likes()
             like.user_id = request.user.id
@@ -57,29 +73,66 @@ def like(request, post_id):
             post.likes += 1
             post.save()
             like.save()
-        return redirect('/app')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        return redirect('/')
 
 
 def profile(request, user_id):
-    if(user_id != request.user.id):
-        user = User.objects.filter(id=user_id).get()
-        user_posts = Post.objects.filter(author=user)
-        user_posts_count = Post.objects.filter(author=user).count()
-        return render(request, 'profile.html', {'user': user, 'userposts': user_posts, 'posts_count': user_posts, 'posts_count': user_posts_count})
+    if(request.user.is_authenticated):
+        if(user_id != request.user.id):
+            user = User.objects.filter(id=user_id).get()
+            user_posts = Post.objects.filter(author=user)
+            user_posts_count = Post.objects.filter(author=user).count()
+            likes = list(Likes.objects.filter(user_id=request.user.id))
+            liked_post_ids = [x.post_id for x in likes]
+            if(Follows.objects.filter(follower_id=request.user.id, receiver_id=user_id).count() != 0):
+                follows = True
+            else:
+                follows = False
+            return render(request, 'profile.html', {'user': user, 'userposts': user_posts, 'posts_count': user_posts, 'posts_count': user_posts_count, 'follows': follows, 'liked_post_ids': liked_post_ids})
+        else:
+            return redirect('/app/userprofile')
     else:
-        return redirect('/app/userprofile')
+        return redirect('/')
 
 
 def follows(request, user_id):
-    if(request.method.lower() == "post"):
-        follow_count = Follows.objects.filter(
-            follower=request.user.id, receiver=user_id).count()
-        if (follow_count != 0):
-            follow = Follows.objects.filter(receiver=user_id).delete()
-            return redirect('/app/profile/{}'.format(user_id))
+    if(request.user.is_authenticated):
+        if(request.method.lower() == "post"):
+            follow_count = Follows.objects.filter(
+                follower=request.user.id, receiver=user_id).count()
+            if (follow_count != 0):
+                follow = Follows.objects.filter(receiver=user_id).delete()
+                return redirect('/app/profile/{}'.format(user_id))
+            else:
+                follow = Follows()
+                follow.follower_id = request.user.id
+                follow.receiver_id = user_id
+                follow.save()
+                return redirect('/app/profile/{}'.format(user_id))
+    else:
+        return redirect('/')
+
+
+def editpost(request, post_id):
+    if(request.user.is_authenticated):
+        if (request.method.lower() == 'post'):
+            post_list = Post.objects.filter(id=post_id)
+            post = post_list[0]
+            post.title = request.POST['title']
+            post.desc = request.POST['desc']
+            post.image = request.FILES['image']
+            post.loc = request.POST['loc']
+            post.tags = request.POST['tags']
+            post.save()
+            return redirect('/app')
         else:
-            follow = Follows()
-            follow.follower_id = request.user.id
-            follow.receiver_id = user_id
-            follow.save()
-            return redirect('/app/profile/{}'.format(user_id))
+            post_list = Post.objects.filter(id=post_id)
+            post = post_list[0]
+            if(post.author_id == request.user.id):
+                return render(request, 'editpost.html', {'post': post})
+            else:
+                return redirect('/app')
+    else:
+        return redirect('/')

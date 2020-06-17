@@ -21,7 +21,13 @@
             <h3 class='d-inline mr-3'>{{user.username}}</h3>
             <form action='/app/follows/{{user.id}}' method="POST" class='d-inline'>
                 {% csrf_token %}
-                <button class='btn btn-dark rounded-0 mb-1' type='submit'>Follow</button><br><br>
+                {%if follows %}
+                <button class='btn btn-dark rounded-0 mb-1' type='submit'> <i
+                        class='fas fa-user-minus'></i></button><br><br>
+                {% else %}
+                <button class='btn btn-dark rounded-0 mb-1' type='submit'><i
+                        class='fas fa-user-plus'></i></button><br><br>
+                {% endif %}
             </form>
             <h5 class='d-inline mr-3'>Followers: {{user.followers}}</h5>
             <h5 class='d-inline mr-3'>Following: {{user.following}}</h5>
@@ -33,7 +39,6 @@
     </div>
     <hr style='border-color: black'>
 </div>
-
 
 <div class="card-deck mb-3" style='margin-left: 4%;'>
     {% for userpost in userposts%}
@@ -54,12 +59,17 @@
             </h6>
             <div class='row'>
                 <div class='col-sm'>
-                    <h4 class='d-inline'><button class='far fa-thumbs-up'
+                    {% if userpost.id not in liked_post_ids %}
+                    <h4 class='d-inline'><a href='/app/{{userpost.id}}' class='far fa-thumbs-up'
                             style='text-decoration:none'>{{userpost.likes}}</a>
                     </h4>
-                    <h4 class='d-inline pl-1'><button class='far fa-comment' style='text-decoration:none'></button></h4>
-                    <h4 class='d-inline pl-1'><button class='far fa-bookmark' style='text-decoration:none'></button>
+                    {% else %}
+                    <h4 class='d-inline'><a href='/app/{{userpost.id}}' class='fa fa-thumbs-up'
+                            style='text-decoration:none'>{{userpost.likes}}</a>
                     </h4>
+                    {% endif %}
+                    <h4 class='d-inline pl-1'><a href='' class='far fa-comment' style='text-decoration:none'></a></h4>
+                    <h4 class='d-inline pl-1'><a href='' class='far fa-bookmark' style='text-decoration:none'></a></h4>
                 </div>
                 <div class="col-sm">
                     <p class="card-text float-right pr"><small class="text-muted">{{userpost.timestamp}}</small></p>

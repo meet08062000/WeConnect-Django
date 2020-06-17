@@ -35,7 +35,14 @@ def createpost(request):
             post.save()
             return redirect('/app')
         else:
-            return render(request, 'createpost.html')
+            post = Post()
+            post.title = ''
+            post.desc = ''
+            post.image = ''
+            post.loc = ''
+            post.tags = ''
+            post.author_id = ''
+            return render(request, 'createpost.html', {'post': post})
     else:
         return redirect('/')
 
@@ -134,5 +141,24 @@ def editpost(request, post_id):
                 return render(request, 'editpost.html', {'post': post})
             else:
                 return redirect('/app')
+    else:
+        return redirect('/')
+
+
+def editprofile(request):
+    if(request.user.is_authenticated):
+        if (request.method.lower() == 'post'):
+            user = request.user
+            user.username = request.POST['username']
+            user.first_name = request.POST['first_name']
+            user.last_name = request.POST['last_name']
+            # user.image = request.FILES['image']
+            # user.dob = request.POST['dob']
+            user.email = request.POST['email']
+            user.save()
+            return redirect('/app')
+        else:
+            user = request.user
+            return render(request, 'editprofile.html', {'user': user})
     else:
         return redirect('/')

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Edit Profile</title>
+{% endblock %}
+
+{% block content %}
+<div class='container' style='width: 50%; margin-top: 6%'>
+    <h1>
+        <center style='font-family: "Roboto Slab", Serif'>Edit Profile</center>
+    </h1>
+    <br>
+    <form action='/app/editprofile' method='post' enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class='form-group'>
+            <label for='username'>Username: </label>
+            <input type='text' name='username' placeholder='Enter Username' value={{user.username}}
+                class='form-control'>
+        </div>
+
+        <div class='form-group'>
+            <label for='email'>email: </label>
+            <input type='email' name='email' placeholder='Enter email' value={{user.email}} class='form-control'>
+        </div>
+
+        <div class='form-group'>
+            <label for='first_name'>First Name: </label>
+            <input type='text' name='first_name' placeholder='Enter First name' value={{user.first_name}}
+                class='form-control'>
+        </div>
+
+        <div class='form-group'>
+            <label for='first_name'>Last Name: </label>
+            <input type='text' name='last_name' placeholder='Enter Last name' value={{user.last_name}}
+                class='form-control'>
+        </div>
+
+        <!-- <div class='form-group'>
+            <label for='image'>Image: </label>
+            <input type='file' name='image' placeholder='Enter Image' value='Image'>
+        </div> -->
+
+        <div class='form-group'>
+            <label for='des'>Description: </label>
+            <input type='text' name='des' placeholder='Enter Description' value='Location' class='form-control'>
+        </div>
+
+        <!-- <div class='form-group'>
+            <label for='tags'>D.O.B: </label>
+            <input type='text' name='dob' placeholder='Enter D' value='Tags' class='form-control'>
+        </div> -->
+
+        <div class='form-group'>
+            <button type='submit' class='btn btn-dark'>Submit</button>
+        </div>
+
+    </form>
+    {% endblock %}

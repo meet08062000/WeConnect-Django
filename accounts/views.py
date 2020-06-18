@@ -7,8 +7,8 @@ from django.contrib import messages
 
 def index(request):
     if(request.user.is_authenticated):
-        return redirect ('/app')
-    return render(request, 'index.html')
+        return redirect('/app')
+    return render(request, 'accounts/index.html')
 
 
 def login(request):

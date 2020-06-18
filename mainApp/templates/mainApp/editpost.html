@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'mainApp/base.html' %}
 
 {% block title %}
 <title>Post</title>
@@ -10,7 +10,7 @@
         <center style='font-family: "Roboto Slab", Serif'>Post</center>
     </h1>
     <br>
-    <form action='/app/post' method='post' enctype="multipart/form-data">
+    <form action='/app/post/{{post.id}}' method='post' enctype="multipart/form-data">
 
         {% csrf_token %}
 

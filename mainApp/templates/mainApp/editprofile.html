@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'mainApp/base.html' %}
 
 {% block title %}
 <title>Edit Profile</title>
@@ -16,24 +16,24 @@
 
         <div class='form-group'>
             <label for='username'>Username: </label>
-            <input type='text' name='username' placeholder='Enter Username' value={{user.username}}
+            <input type='text' name='username' placeholder='Enter Username' value='{{user.username}}'
                 class='form-control'>
         </div>
 
         <div class='form-group'>
-            <label for='email'>email: </label>
-            <input type='email' name='email' placeholder='Enter email' value={{user.email}} class='form-control'>
+            <label for='email'>Email: </label>
+            <input type='email' name='email' placeholder='Enter email' value='{{user.email}}' class='form-control'>
         </div>
 
         <div class='form-group'>
             <label for='first_name'>First Name: </label>
-            <input type='text' name='first_name' placeholder='Enter First name' value={{user.first_name}}
+            <input type='text' name='first_name' placeholder='Enter First name' value='{{user.first_name}}'
                 class='form-control'>
         </div>
 
         <div class='form-group'>
             <label for='first_name'>Last Name: </label>
-            <input type='text' name='last_name' placeholder='Enter Last name' value={{user.last_name}}
+            <input type='text' name='last_name' placeholder='Enter Last name' value='{{user.last_name}}'
                 class='form-control'>
         </div>
 

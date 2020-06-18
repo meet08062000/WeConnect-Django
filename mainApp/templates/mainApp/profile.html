@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'mainApp/base.html' %}
 {% load static %}
 {% block title %}
-<title>Profile Page</title>
+<title>User Profile</title>
 {% endblock %}
 
 {% block content %}
@@ -9,33 +9,38 @@
 
 <div class='container' style='width: 70%; margin-top: 6%'>
     <h1>
-        <center style='font-family: "Roboto Slab", Serif'>Profile Page</center>
+        <center style='font-family: "Roboto Slab", Serif'>User Profile</center>
     </h1>
     <br>
     <div class='row'>
-        <div class="col">
-            <img src='{% static "bg_img.jpeg" %}' class="rounded-circle mb-2" alt="100x100" width="180" height="180"
-                style='border-radius: 50%'>
+        <div class="col text-center">
+            <img src='{% static "mainApp/bg_img.jpeg" %}' class="rounded-circle mb-2" alt="100x100" width="180"
+                height="180" style='border-radius: 50%'><br><br>
         </div>
         <div class='col'>
-            <h3 class='d-inline mr-3'>{{profile.username}}</h3>
-            <a href='/app/editprofile'><button type='submit' name='edit_profile' class='btn btn-light border border-dark d-inline'
-                style='margin-bottom:4%'>
-                <i class='fa fa-edit'></i>
-            </button></a><br>
-            <h5 class='d-inline mr-3'>Followers: {{profile.followers}}</h5>
-            <h5 class='d-inline mr-3'>Following: {{profile.following}}</h5>
+            <h3 class='d-inline mr-3'>{{user.username}}</h3>
+            <form action='/app/follows/{{user.id}}' method="POST" class='d-inline'>
+                {% csrf_token %}
+                {%if follows %}
+                <button class='btn btn-dark rounded-0 mb-1' type='submit'> <i
+                        class='fas fa-user-minus'></i></button><br><br>
+                {% else %}
+                <button class='btn btn-dark rounded-0 mb-1' type='submit'><i
+                        class='fas fa-user-plus'></i></button><br><br>
+                {% endif %}
+            </form>
+            <h5 class='d-inline mr-3'>Followers: {{user.followers}}</h5>
+            <h5 class='d-inline mr-3'>Following: {{user.following}}</h5>
             <h5 class='d-inline mr-3'>Posts: {{posts_count}}</h5>
             <hr style='border-color: black'>
-            <h4 class='d-inline mr-3'><b style='font-weight: 500'>{{profile.username}}</b></h4><br>
-            <h5 class='d-inline mr-3'>{{profile.desc}} </h5>
+            <h4 class='d-inline mr-3'><b style='font-weight: 500'>{{user.username}}</b></h4><br>
+            <h5 class='d-inline mr-3'>{{user.desc}} </h5>
         </div>
     </div>
     <hr style='border-color: black'>
 </div>
 
-
-<div class="card-deck mb-3" style='margin-left: 4%'>
+<div class="card-deck mb-3" style='margin-left: 4%;'>
     {% for userpost in userposts%}
     <div class='card'>
         <div class="card-header ">

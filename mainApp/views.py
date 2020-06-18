@@ -17,7 +17,7 @@ def dashboard(request):
         liked_post_ids = [x.post_id for x in likes]
         for x in following_id:
             posts += Post.objects.filter(author_id=x)
-        return render(request, 'dashboard.html', {'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True), 'user_id': request.user.id, 'liked_post_ids': liked_post_ids})
+        return render(request, 'mainApp/dashboard.html', {'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True), 'user_id': request.user.id, 'liked_post_ids': liked_post_ids})
     else:
         return redirect('/')
 
@@ -42,7 +42,7 @@ def createpost(request):
             post.loc = ''
             post.tags = ''
             post.author_id = ''
-            return render(request, 'createpost.html', {'post': post})
+            return render(request, 'mainApp/createpost.html', {'post': post})
     else:
         return redirect('/')
 
@@ -56,7 +56,7 @@ def userprofile(request):
             posts_count = logged_in_user_posts.count()
             likes = list(Likes.objects.filter(user_id=request.user.id))
             liked_post_ids = [x.post_id for x in likes]
-            return render(request, 'userprofile.html', {'profile': request.user, 'userposts': logged_in_user_posts, 'posts_count': posts_count, 'liked_post_ids': liked_post_ids})
+            return render(request, 'mainApp/userprofile.html', {'profile': request.user, 'userposts': logged_in_user_posts, 'posts_count': posts_count, 'liked_post_ids': liked_post_ids})
     else:
         return redirect('/')
 
@@ -97,7 +97,7 @@ def profile(request, user_id):
                 follows = True
             else:
                 follows = False
-            return render(request, 'profile.html', {'user': user, 'userposts': user_posts, 'posts_count': user_posts, 'posts_count': user_posts_count, 'follows': follows, 'liked_post_ids': liked_post_ids})
+            return render(request, 'mainApp/profile.html', {'user': user, 'userposts': user_posts, 'posts_count': user_posts, 'posts_count': user_posts_count, 'follows': follows, 'liked_post_ids': liked_post_ids})
         else:
             return redirect('/app/userprofile')
     else:
@@ -138,7 +138,7 @@ def editpost(request, post_id):
             post_list = Post.objects.filter(id=post_id)
             post = post_list[0]
             if(post.author_id == request.user.id):
-                return render(request, 'editpost.html', {'post': post})
+                return render(request, 'mainApp/editpost.html', {'post': post})
             else:
                 return redirect('/app')
     else:
@@ -159,6 +159,6 @@ def editprofile(request):
             return redirect('/app')
         else:
             user = request.user
-            return render(request, 'editprofile.html', {'user': user})
+            return render(request, 'mainApp/editprofile.html', {'user': user})
     else:
         return redirect('/')

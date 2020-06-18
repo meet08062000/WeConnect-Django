@@ -17,7 +17,8 @@ def dashboard(request):
             posts += Post.objects.filter(author_id=x)
         context = {
             'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True),
-            'user_id': request.user.id, 'liked_post_ids': liked_post_ids,
+            'user_id': request.user.id,
+            'liked_post_ids': liked_post_ids,
             'title': 'Dashboard'
         }
         return render(request, 'mainApp/dashboard.html', context)
@@ -39,13 +40,15 @@ def createpost(request):
             return redirect('/app')
         else:
             post = Post()
-            post.title = ''
-            post.desc = ''
-            post.image = ''
-            post.loc = ''
-            post.tags = ''
-            post.author_id = ''
-            return render(request, 'mainApp/createpost.html', {'post': post, 'title': 'Create Post'})
+            #post.title = ''
+            #post.desc = ''
+            #post.image = ''
+            #post.loc = ''
+            #post.tags = ''
+            #post.author_id = ''
+            # , {'post': post, 'title': 'Create Post'}
+            return render(request, 'mainApp/createpost.html')
+
     else:
         return redirect('/')
 
@@ -55,13 +58,15 @@ def userprofile(request):
         if (request.method.lower() == 'post'):
             pass
         else:
-            logged_in_user_posts = Post.objects.filter(author=request.user)
-            posts_count = logged_in_user_posts.count()
+            posts = Post.objects.filter(author=request.user)
+            posts_count = posts.count()
             likes = list(Like.objects.filter(user_id=request.user.id))
             liked_post_ids = [x.post_id for x in likes]
             context = {
-                'profile': request.user, 'userposts': logged_in_user_posts,
-                'posts_count': posts_count, 'liked_post_ids': liked_post_ids,
+                'profile': request.user,
+                'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True),
+                'posts_count': posts_count,
+                'liked_post_ids': liked_post_ids,
                 'title': ' Your Profile'
             }
             return render(request, 'mainApp/userprofile.html', context)
@@ -97,8 +102,8 @@ def profile(request, user_id):
     if(request.user.is_authenticated):
         if(user_id != request.user.id):
             user = User.objects.filter(id=user_id).get()
-            user_posts = Post.objects.filter(author=user)
-            user_posts_count = Post.objects.filter(author=user).count()
+            posts = Post.objects.filter(author=user)
+            posts_count = Post.objects.filter(author=user).count()
             likes = list(Like.objects.filter(user_id=request.user.id))
             liked_post_ids = [x.post_id for x in likes]
             if(Follow.objects.filter(follower_id=request.user.id, receiver_id=user_id).count() != 0):
@@ -106,8 +111,12 @@ def profile(request, user_id):
             else:
                 follows = False
             context = {
-                'user': user, 'userposts': user_posts, 'posts_count': user_posts,
-                'posts_count': user_posts_count, 'follows': follows, 'liked_post_ids': liked_post_ids,
+                'user': user,
+                'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True),
+                'posts_count': posts,
+                'posts_count': posts_count,
+                'follows': follows,
+                'liked_post_ids': liked_post_ids,
                 'title': 'User profile'
             }
             return render(request, 'mainApp/profile.html', context)
@@ -142,7 +151,8 @@ def editpost(request, post_id):
             post = post_list[0]
             post.title = request.POST['title']
             post.desc = request.POST['desc']
-            post.image = request.FILES['image']
+            if(request.FILES):
+                post.image = request.FILES['image']
             post.loc = request.POST['loc']
             post.tags = request.POST['tags']
             post.save()
@@ -175,3 +185,8 @@ def editprofile(request):
             return render(request, 'mainApp/editprofile.html', {'user': user, 'title': 'Edit profile'})
     else:
         return redirect('/')
+
+def deletepost(request, post_id):
+    post = Post.objects.filter(id = post_id)
+    post.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

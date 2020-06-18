@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Post, Likes, Follows
+from .models import Post, Like, Follow
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -9,11 +9,11 @@ from django.http import HttpResponseRedirect
 
 def dashboard(request):
     if(request.user.is_authenticated):
-        following = Follows.objects.filter(follower_id=request.user.id).all()
+        following = Follow.objects.filter(follower_id=request.user.id).all()
         following_id = [x.receiver_id for x in following]
         following_id += [request.user.id]
         posts = []
-        likes = list(Likes.objects.filter(user_id=request.user.id))
+        likes = list(Like.objects.filter(user_id=request.user.id))
         liked_post_ids = [x.post_id for x in likes]
         for x in following_id:
             posts += Post.objects.filter(author_id=x)
@@ -54,7 +54,7 @@ def userprofile(request):
         else:
             logged_in_user_posts = Post.objects.filter(author=request.user)
             posts_count = logged_in_user_posts.count()
-            likes = list(Likes.objects.filter(user_id=request.user.id))
+            likes = list(Like.objects.filter(user_id=request.user.id))
             liked_post_ids = [x.post_id for x in likes]
             return render(request, 'mainApp/userprofile.html', {'profile': request.user, 'userposts': logged_in_user_posts, 'posts_count': posts_count, 'liked_post_ids': liked_post_ids})
     else:
@@ -63,18 +63,18 @@ def userprofile(request):
 
 def like(request, post_id):
     if(request.user.is_authenticated):
-        like_count = Likes.objects.filter(
+        like_count = Like.objects.filter(
             user_id=request.user.id, post_id=post_id).count()
         post = Post.objects.filter(id=post_id).get()
         if(like_count != 0):
             post.likes -= 1
             post.save()
-            like = Likes.objects.filter(
+            like = Like.objects.filter(
                 user_id=request.user.id, post_id=post_id).get()
             like.delete()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
-            like = Likes()
+            like = Like()
             like.user_id = request.user.id
             like.post_id = post_id
             post.likes += 1
@@ -91,9 +91,9 @@ def profile(request, user_id):
             user = User.objects.filter(id=user_id).get()
             user_posts = Post.objects.filter(author=user)
             user_posts_count = Post.objects.filter(author=user).count()
-            likes = list(Likes.objects.filter(user_id=request.user.id))
+            likes = list(Like.objects.filter(user_id=request.user.id))
             liked_post_ids = [x.post_id for x in likes]
-            if(Follows.objects.filter(follower_id=request.user.id, receiver_id=user_id).count() != 0):
+            if(Follow.objects.filter(follower_id=request.user.id, receiver_id=user_id).count() != 0):
                 follows = True
             else:
                 follows = False
@@ -107,13 +107,13 @@ def profile(request, user_id):
 def follows(request, user_id):
     if(request.user.is_authenticated):
         if(request.method.lower() == "post"):
-            follow_count = Follows.objects.filter(
+            follow_count = Follow.objects.filter(
                 follower=request.user.id, receiver=user_id).count()
             if (follow_count != 0):
-                follow = Follows.objects.filter(receiver=user_id).delete()
+                follow = Follow.objects.filter(receiver=user_id).delete()
                 return redirect('/app/profile/{}'.format(user_id))
             else:
-                follow = Follows()
+                follow = Follow()
                 follow.follower_id = request.user.id
                 follow.receiver_id = user_id
                 follow.save()

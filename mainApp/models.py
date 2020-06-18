@@ -16,10 +16,16 @@ class Post(models.Model):
     liked_or_not = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
 
-class Likes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post')
 
-class Follows(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follows')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+class Like(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='like')
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='post')
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='follow')
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='receiver')

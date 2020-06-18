@@ -14,6 +14,9 @@ class Post(models.Model):
     liked_or_not = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.title
+
 
 class Like(models.Model):
     user = models.ForeignKey(

@@ -1,8 +1,5 @@
 {% extends 'mainApp/base.html' %}
 {% load static %}
-{% block title %}
-<title>Profile Page</title>
-{% endblock %}
 
 {% block content %}
 
@@ -19,7 +16,7 @@
         </div>
         <div class='col'>
             <h3 class='d-inline mr-3'>{{profile.username}}</h3>
-            <a href='/app/editprofile'><button type='submit' name='edit_profile'
+            <a href="{% url 'editprofile' %}"><button type='submit' name='edit_profile'
                     class='btn btn-light border border-dark d-inline' style='margin-bottom:4%'>
                     <i class='fa fa-edit'></i>
                 </button></a><br>
@@ -35,7 +32,7 @@
 </div>
 
 
-<div class="card-deck mb-3" style='margin-left: 4%'>
+<div class=" card-deck mb-3" style='margin-left: 4%'>
     {% for userpost in userposts%}
     <div class='card'>
         <div class="card-header ">

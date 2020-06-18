@@ -4,8 +4,6 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 
-# Create your views here.
-
 
 def dashboard(request):
     if(request.user.is_authenticated):
@@ -17,7 +15,12 @@ def dashboard(request):
         liked_post_ids = [x.post_id for x in likes]
         for x in following_id:
             posts += Post.objects.filter(author_id=x)
-        return render(request, 'mainApp/dashboard.html', {'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True), 'user_id': request.user.id, 'liked_post_ids': liked_post_ids})
+        context = {
+            'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True),
+            'user_id': request.user.id, 'liked_post_ids': liked_post_ids,
+            'title': 'Dashboard'
+        }
+        return render(request, 'mainApp/dashboard.html', context)
     else:
         return redirect('/')
 
@@ -42,7 +45,7 @@ def createpost(request):
             post.loc = ''
             post.tags = ''
             post.author_id = ''
-            return render(request, 'mainApp/createpost.html', {'post': post})
+            return render(request, 'mainApp/createpost.html', {'post': post, 'title': 'Create Post'})
     else:
         return redirect('/')
 
@@ -56,7 +59,12 @@ def userprofile(request):
             posts_count = logged_in_user_posts.count()
             likes = list(Like.objects.filter(user_id=request.user.id))
             liked_post_ids = [x.post_id for x in likes]
-            return render(request, 'mainApp/userprofile.html', {'profile': request.user, 'userposts': logged_in_user_posts, 'posts_count': posts_count, 'liked_post_ids': liked_post_ids})
+            context = {
+                'profile': request.user, 'userposts': logged_in_user_posts,
+                'posts_count': posts_count, 'liked_post_ids': liked_post_ids,
+                'title': ' Your Profile'
+            }
+            return render(request, 'mainApp/userprofile.html', context)
     else:
         return redirect('/')
 
@@ -97,7 +105,12 @@ def profile(request, user_id):
                 follows = True
             else:
                 follows = False
-            return render(request, 'mainApp/profile.html', {'user': user, 'userposts': user_posts, 'posts_count': user_posts, 'posts_count': user_posts_count, 'follows': follows, 'liked_post_ids': liked_post_ids})
+            context = {
+                'user': user, 'userposts': user_posts, 'posts_count': user_posts,
+                'posts_count': user_posts_count, 'follows': follows, 'liked_post_ids': liked_post_ids,
+                'title': 'User profile'
+            }
+            return render(request, 'mainApp/profile.html', context)
         else:
             return redirect('/app/userprofile')
     else:
@@ -138,7 +151,7 @@ def editpost(request, post_id):
             post_list = Post.objects.filter(id=post_id)
             post = post_list[0]
             if(post.author_id == request.user.id):
-                return render(request, 'mainApp/editpost.html', {'post': post})
+                return render(request, 'mainApp/editpost.html', {'post': post, 'title': 'Edit post'})
             else:
                 return redirect('/app')
     else:
@@ -159,6 +172,6 @@ def editprofile(request):
             return redirect('/app')
         else:
             user = request.user
-            return render(request, 'mainApp/editprofile.html', {'user': user})
+            return render(request, 'mainApp/editprofile.html', {'user': user, 'title': 'Edit profile'})
     else:
         return redirect('/')

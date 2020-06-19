@@ -46,7 +46,7 @@ def createpost(request):
         #post.tags = ''
         #post.author_id = ''
         # , {'post': post, 'title': 'Create Post'}
-        return render(request, 'mainApp/createpost.html')
+        return render(request, 'mainApp/createpost.html', {'user_id': request.user.id})
 
 
 @login_required
@@ -90,7 +90,8 @@ def profile(request, user_id):
         'posts_count': posts_count,
         'follows': follows,
         'liked_post_ids': liked_post_ids,
-        'title': 'User profile'
+        'title': 'User profile',
+        'user_id': request.user.id,
     }
     return render(request, 'mainApp/profile.html', context)
 
@@ -128,7 +129,7 @@ def editpost(request, post_id):
         post_list = Post.objects.filter(id=post_id)
         post = post_list[0]
         if(post.author_id == request.user.id):
-            return render(request, 'mainApp/editpost.html', {'post': post, 'title': 'Edit post'})
+            return render(request, 'mainApp/editpost.html', {'post': post, 'title': 'Edit post', 'user_id': request.user.id})
         else:
             return redirect('/app')
 
@@ -147,7 +148,7 @@ def editprofile(request):
         return redirect('/app')
     else:
         user = request.user
-        return render(request, 'mainApp/editprofile.html', {'user': user, 'title': 'Edit profile'})
+        return render(request, 'mainApp/editprofile.html', {'user': user, 'title': 'Edit profile', 'user_id': request.user.id})
 
 
 def post_delete(request, post_id):

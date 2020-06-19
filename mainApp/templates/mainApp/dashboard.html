@@ -23,9 +23,10 @@
                 <div class="text" style='font-size: 1.0rem'>{{post.author}}</div>
                 <div class="text" style='font-size: 0.9rem'>{{post.loc}}</div>
             </div>
-            {% if post.author_id == user_id %}
-            <div class='col-sm text-right'>
-                <a href="/app/post/{{post.id}}"><i class='fa fa-edit icon-4x'></i></a>
+            {% if post.author_id == profile.id %}
+            <div class="col-sm text-right">
+                <a href="/app/post/{{post.id}}"><i class="fa fa-edit icon-4x"></i></a>
+                <a href="/app/post_delete/{{post.id}}" type="submit"><i class="fa fa-trash pl-3 icon-4x"></i></a>
             </div>
             {% endif %}
         </div>

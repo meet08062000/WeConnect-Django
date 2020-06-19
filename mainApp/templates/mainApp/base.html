@@ -86,13 +86,16 @@
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-id-card"> </i> Profile
                     </a>
+                    {% if user.is_authenticated %}
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'userprofile' %}">Profile Page</a>
+                        <a class="dropdown-item" href="/app/profile/{{user_id}}">Profile Page</a>
                         <a class=" dropdown-item" href="#">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'logout' %}"><i class=" fa fa-sign-out-alt">
                                 Logout</i></a>
                     </div>
+                    {% endif %}
+
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -103,9 +106,9 @@
     </nav>
     <div class="w3-sidebar w3-bar-block w3-card" style="width:25%;right:0;">
         <h3 class="w3-bar-item" style='background-color: #292b2c; color: white; text-align: center;'>Followers</h3>
-        <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>Link 1</a>
-        <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>Link 2</a>
-        <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>Link 3</a>
+        {% for follower in followers %}
+        <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>{{ follower.username }}</a>
+        {% endfor %}
     </div>
 
     <div class="container-fluid" style="padding-right: 30%;">

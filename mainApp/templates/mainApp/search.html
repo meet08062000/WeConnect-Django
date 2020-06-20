@@ -1,0 +1,28 @@
+{% extends 'mainApp/base.html' %}
+
+{% block content %}
+
+<h1>
+    <center style='font-family: "Roboto Slab", Serif'>Results</center>
+</h1>
+{% for result in results %}
+<a href="/app/profile/{{result.id}}" style='text-decoration: none'>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>{{result.username}}</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <img src="{{result.profile.image.url}}" alt='Profile Pic' width=100px height=100px>
+                </div>
+                <div class="col">
+                    <h3>{{result.first_name}} {{result.last_name}}</h3>
+                    <p class="text-muted">{{result.profile.desc}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% endblock %}

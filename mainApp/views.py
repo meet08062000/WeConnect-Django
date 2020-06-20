@@ -4,6 +4,8 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchVector
+from django.db.models.query_utils import Q
 
 
 @login_required
@@ -82,7 +84,7 @@ def profile(request, user_id):
     liked_post_ids = [x.post_id for x in likes]
     following_count = Follow.objects.filter(follower_id=profile.id).count()
     follower_count = Follow.objects.filter(receiver_id=profile.id).count()
-    if(request.user.follow.count() != 0):
+    if(request.user.follow.filter(receiver_id=user_id).count() != 0):
         follows = True
     else:
         follows = False
@@ -105,7 +107,7 @@ def follows(request, user_id):
         follow_count = Follow.objects.filter(
             follower=request.user.id, receiver=user_id).count()
         if (follow_count != 0):
-            follow = Follow.objects.filter(receiver=user_id).delete()
+            follow = request.user.follow.filter(receiver_id=user_id).delete()
             return redirect('/app/profile/{}'.format(user_id))
         else:
             follow = Follow()
@@ -160,3 +162,15 @@ def post_delete(request, post_id):
     post = Post.objects.filter(id=post_id)
     post.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def search(request):
+    search = request.GET['search']
+    results = User.objects.filter(Q(first_name__contains=search) | Q(
+        username__contains=search) | Q(last_name__contains=search) | Q(email__contains=search))
+    if results is not None:
+        return render(request, 'mainApp/search.html', {'results': results})
+    else:
+        messages.info(request, 'No results found!')
+        return redirect('dashboard')

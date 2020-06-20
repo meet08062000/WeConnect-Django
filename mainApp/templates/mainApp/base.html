@@ -107,8 +107,9 @@
 
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2 rounded-0" type="search" placeholder="Search" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method='GET'>
+                <input class="form-control mr-sm-2 rounded-0" type="search" placeholder="Search" aria-label="Search"
+                    name='search'>
                 <button class="btn btn-light border-dark my-2 my-sm-0 rounded-0" type="submit">Search</button>
             </form>
         </div>
@@ -116,7 +117,7 @@
     <div class="w3-sidebar w3-bar-block w3-card" style="width:25%;right:0;">
         <h3 class="w3-bar-item" style='background-color: #292b2c; color: white; text-align: center;'>Followers</h3>
         {% for follower in followers %}
-        <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'>{{ follower.username }}</a>
+        <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'></a>
         {% endfor %}
     </div>
 

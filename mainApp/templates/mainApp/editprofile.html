@@ -33,15 +33,26 @@
                 class='form-control'>
         </div>
 
-        <!-- <div class='form-group'>
-            <label for='image'>Image: </label>
-            <input type='file' name='image' placeholder='Enter Image' value='Image'>
-        </div> -->
+        <div class='form-group'>
+            <div class="row">
+                <div class="col">
+                    <label for='image'>Image: </label>
+                    <input type='file' name='image' placeholder='Image'>
+                </div>
+                {% if user.profile.image.url != '/media/default.jpg' %}
+                <div class="col">
+                    <label for='curr_image'>Current image: </label>
+                    <img src='{{user.profile.image.url}}' name='curr_image' style="width: 70%; height: 70%">
+                </div>
+                {%endif%}
+            </div>
+        </div>
 
-        <!-- <div class='form-group'>
+        <div class='form-group'>
             <label for='des'>Description: </label>
-            <input type='text' name='des' placeholder='Enter Description' value='Location' class='form-control'>
-        </div> -->
+            <textarea type='text' name='desc' placeholder='Enter Description'
+                class='form-control'>{{user.profile.desc}}</textarea>
+        </div>
 
         <!-- <div class='form-group'>
             <label for='tags'>D.O.B: </label>

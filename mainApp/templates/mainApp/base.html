@@ -68,6 +68,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
                 <li class="nav-item active p-2">
                     <a href="{% url 'dashboard' %}"><button type=" button" class="btn btn-dark rounded-0"><i
                                 class="fa fa-home" aria-hidden="true"> Home</i></button></a>
@@ -81,7 +82,6 @@
                                 class="fa fa-newspaper">
                                 Post</i></button></a>
                 </li>
-                {% if user.is_authenticated %}
                 <li class="nav-item dropdown p-2">
                     <a class="btn btn-dark rounded-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -96,7 +96,7 @@
                     </div>
                     {% else %}
                 <li class="nav-item p-2">
-                    <a href="{% url 'login' %}"><button type=" button" class="btn btn-dark rounded-0"><i
+                    <a href="{% url 'login' %}"><button type=" button" class="btn btn-dark rounded-0 mr-2"><i
                                 class="fa fa-user">
                                 Login</i></button></a>
                     <a href="{% url 'register' %}"><button type=" button" class="btn btn-dark rounded-0"><i

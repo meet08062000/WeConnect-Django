@@ -144,9 +144,11 @@ def editprofile(request):
         user.username = request.POST['username']
         user.first_name = request.POST['first_name']
         user.last_name = request.POST['last_name']
-        # user.image = request.FILES['image']
+        if request.FILES:
+            user.profile.image = request.FILES['image']
         # user.dob = request.POST['dob']
         user.email = request.POST['email']
+        user.profile.desc = request.POST['desc']
         user.save()
         return redirect('/app')
     else:

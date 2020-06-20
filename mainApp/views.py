@@ -12,13 +12,12 @@ def dashboard(request):
     following_id = [x.receiver_id for x in following]
     following_id += [request.user.id]
     posts = []
-    likes = list(Like.objects.filter(user_id=request.user.id))
+    likes = list(request.user.like.all())
     liked_post_ids = [x.post_id for x in likes]
     for x in following_id:
         posts += Post.objects.filter(author_id=x)
     context = {
         'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True),
-        # 'user_id': request.user.id,
         'liked_post_ids': liked_post_ids,
         'title': 'Dashboard'
     }
@@ -77,19 +76,22 @@ def like(request, post_id):
 @login_required
 def profile(request, user_id):
     profile = User.objects.filter(id=user_id).get()
-    posts = Post.objects.filter(author=profile)
-    posts_count = Post.objects.filter(author=profile).count()
-    likes = list(Like.objects.filter(user_id=request.user.id))
+    posts = profile.post_set.all()
+    posts_count = posts.count()
+    likes = list(request.user.like.all())
     liked_post_ids = [x.post_id for x in likes]
-    if(Follow.objects.filter(follower_id=request.user.id, receiver_id=user_id).count() != 0):
+    following_count = Follow.objects.filter(follower_id=profile.id).count()
+    follower_count = Follow.objects.filter(receiver_id=profile.id).count()
+    if(request.user.follow.count() != 0):
         follows = True
     else:
         follows = False
     context = {
         'profile': profile,
         'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True),
-        'posts_count': posts,
         'posts_count': posts_count,
+        'follower_count': follower_count,
+        'following_count': following_count,
         'follows': follows,
         'liked_post_ids': liked_post_ids,
         'title': 'User profile',

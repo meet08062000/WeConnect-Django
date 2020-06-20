@@ -11,13 +11,13 @@
     <br>
     <div class='row' style='margin-top: 2%'>
         <div class="col">
-            <img src='{% static "mainApp/bg_img.jpeg" %}' class="rounded-circle mb-2" alt="100x100" width="180"
-                height="180" style='border-radius: 50%'>
+            <img src='{{profile.profile.image.url}}' class="rounded-circle mb-2" alt="100x100" width="180" height="180"
+                style='border-radius: 50%'>
         </div>
         <div class='col'>
-            <h3 class='d-inline mr-3'>{{user.username}}</h3>
-            {% if current_user_id != user.id %}
-            <form action='/app/follows/{{user.id}}' method="POST" class='d-inline'>
+            <h3 class='d-inline mr-3'>{{profile.username}}</h3>
+            {% if profile.id != user.id %}
+            <form action='/app/follows/{{profile.id}}' method="POST" class='d-inline'>
                 {% csrf_token %}
                 {%if follows %}
                 <button class='btn btn-dark rounded-0 mb-1' type='submit'> <i
@@ -28,18 +28,18 @@
                 {% endif %}
             </form>
             {% endif %}
-            {% if current_user_id == user.id %}
+            {% if profile.id == user.id %}
             <a href="{% url 'editprofile' %}"><button type='submit' name='edit_user'
                     class='btn btn-light border border-dark d-inline' style='margin-bottom:4%'>
                     <i class='fa fa-edit'></i>
                 </button></a><br>
             {% endif %}
-            <h5 class='d-inline mr-3'>Followers: {{user.followers}}</h5>
-            <h5 class='d-inline mr-3'>Following: {{user.following}}</h5>
+            <h5 class='d-inline mr-3'>Followers: {{profile.followers}}</h5>
+            <h5 class='d-inline mr-3'>Following: {{profile.following}}</h5>
             <h5 class='d-inline mr-3'>Posts: {{posts_count}}</h5>
             <hr style='border-color: black'>
-            <h4 class='d-inline mr-3'><b style='font-weight: 500'>{{user.username}}</b></h4><br>
-            <h5 class='d-inline mr-3'>{{user.desc}} </h5>
+            <h4 class='d-inline mr-3'><b style='font-weight: 500'>{{profile.username}}</b></h4><br>
+            <h5 class='d-inline mr-3'>{{profile.desc}} </h5>
         </div>
     </div>
     <hr style='border-color: black'><br>
@@ -54,7 +54,7 @@
                 <div class="col-sm">
                     <div class="text" style='font-size: 0.9rem'>{{post.loc}}</div>
                 </div>
-                {% if current_user_id == user.id %}
+                {% if profile.id == user.id %}
                 {% if post.author_id == user.id %}
                 <div class="col-sm text-right">
                     <a href="/app/post/{{post.id}}"><i class="fa fa-edit icon-4x"></i></a>

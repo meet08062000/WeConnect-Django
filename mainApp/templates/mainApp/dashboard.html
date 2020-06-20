@@ -16,14 +16,14 @@
 </h1>
 
 {% for post in posts %}
-<div class="card mb-3 ml-5" style='width: 70%; left:13%'>
+<div class="card mb-3 ml-5" style='width: 70%; left:13%' id={{post.id}}>
     <div class="card-header mb-1">
         <div class="row mb-1">
             <div class='col-sm'>
                 <div class="text" style='font-size: 1.0rem'>{{post.author}}</div>
                 <div class="text" style='font-size: 0.9rem'>{{post.loc}}</div>
             </div>
-            {% if post.author_id == profile.id %}
+            {% if post.author_id == user.id %}
             <div class="col-sm text-right">
                 <a href="/app/post/{{post.id}}"><i class="fa fa-edit icon-4x"></i></a>
                 <a href="/app/post_delete/{{post.id}}" type="submit"><i class="fa fa-trash pl-3 icon-4x"></i></a>

@@ -88,15 +88,16 @@
                         <i class="fa fa-id-card"> </i> Profile
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/app/profile/{{user_id}}">Profile Page</a>
+                        <a class="dropdown-item" href="/app/profile/{{user.id}}">Profile Page</a>
                         <a class=" dropdown-item" href="#">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'logout' %}"><i class=" fa fa-sign-out-alt">
                                 Logout</i></a>
                     </div>
-                {% else %}
+                    {% else %}
                 <li class="nav-item p-2">
-                    <a href="{% url 'login' %}"><button type=" button" class="btn btn-dark rounded-0"><i class="fa fa-user">
+                    <a href="{% url 'login' %}"><button type=" button" class="btn btn-dark rounded-0"><i
+                                class="fa fa-user">
                                 Account</i></button></a>
                 </li>
                 {% endif %}

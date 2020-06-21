@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from PIL import Image
 
 
 class Post(models.Model):
@@ -17,6 +18,22 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self):
+        super().save()
+        img = Image.open(self.image.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+
+    def delete(self, *args, **kwargs):
+        # You have to prepare what you need before delete the model
+        storage, path = self.image.storage, self.image.path
+        # Delete the model before the file
+        super(Post, self).delete(*args, **kwargs)
+        # Delete the file after the model
+        storage.delete(path)
+
 
 class Like(models.Model):
     user = models.ForeignKey(
@@ -30,3 +47,19 @@ class Follow(models.Model):
         User, on_delete=models.CASCADE, related_name='follow')
     receiver = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='receiver')
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='bookmark')
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='bookmark')
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='comment')
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name='comment')
+    message = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)

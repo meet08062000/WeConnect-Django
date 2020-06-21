@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
 from django.db.models.query_utils import Q
+from mainApp.models import Bookmark
 
 
 @login_required
@@ -16,12 +17,16 @@ def dashboard(request):
     posts = []
     likes = list(request.user.like.all())
     liked_post_ids = [x.post_id for x in likes]
+    bookmarks = list(request.user.bookmark.all())
+    bookmarks_post_id = [x.post_id for x in bookmarks]
     for x in following_id:
         posts += Post.objects.filter(author_id=x)
     context = {
         'posts': sorted(posts, key=lambda x: x.timestamp, reverse=True),
         'liked_post_ids': liked_post_ids,
-        'title': 'Dashboard'
+        'bookmarks': bookmarks_post_id,
+        'title': 'Dashboard',
+        'following_list': request.user.follow.all()
     }
     return render(request, 'mainApp/dashboard.html', context)
 
@@ -48,7 +53,8 @@ def createpost(request):
         post.author_id = ''
         context = {
             'post': post,
-            'title': 'Create Post'
+            'title': 'Create Post',
+            'following_list': request.user.follow.all()
         }
         return render(request, 'mainApp/createpost.html', context)
 
@@ -97,12 +103,13 @@ def profile(request, user_id):
         'follows': follows,
         'liked_post_ids': liked_post_ids,
         'title': 'User profile',
+        'following_list': request.user.follow.all()
     }
     return render(request, 'mainApp/profile.html', context)
 
 
 @login_required
-def follows(request, user_id):
+def follow(request, user_id):
     if(request.method.lower() == "post"):
         follow_count = Follow.objects.filter(
             follower=request.user.id, receiver=user_id).count()
@@ -134,7 +141,7 @@ def editpost(request, post_id):
         post_list = Post.objects.filter(id=post_id)
         post = post_list[0]
         if(post.author_id == request.user.id):
-            return render(request, 'mainApp/editpost.html', {'post': post, 'title': 'Edit post'})
+            return render(request, 'mainApp/editpost.html', {'post': post, 'title': 'Edit post', 'following_list': request.user.follow.all()})
         else:
             return redirect('/app')
 
@@ -155,11 +162,13 @@ def editprofile(request):
         return redirect('/app')
     else:
         user = request.user
-        return render(request, 'mainApp/editprofile.html', {'title': 'Edit profile'})
+        return render(request, 'mainApp/editprofile.html', {'title': 'Edit profile', 'following_list': request.user.follow.all()})
 
 
 def post_delete(request, post_id):
-    post = Post.objects.filter(id=post_id)
+    post = Post.objects.filter(id=post_id).get()
+    # if(post.image):
+    #     post.image.delete()
     post.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -170,7 +179,24 @@ def search(request):
     results = User.objects.filter(Q(first_name__contains=search) | Q(
         username__contains=search) | Q(last_name__contains=search) | Q(email__contains=search))
     if results is not None:
-        return render(request, 'mainApp/search.html', {'results': results})
+        return render(request, 'mainApp/search.html', {'results': results, 'following_list': request.user.follow.all()})
     else:
         messages.info(request, 'No results found!')
         return redirect('dashboard')
+
+
+@login_required
+def bookmark(request, post_id):
+    bookmark_count = Bookmark.objects.filter(
+        user_id=request.user.id, post_id=post_id).count()
+    if(bookmark_count != 0):
+        bookmark = Bookmark.objects.filter(
+            user_id=request.user.id, post_id=post_id).get()
+        bookmark.delete()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        bookmark = Bookmark()
+        bookmark.user_id = request.user.id
+        bookmark.post_id = post_id
+        bookmark.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

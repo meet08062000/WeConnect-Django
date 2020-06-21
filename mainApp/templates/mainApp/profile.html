@@ -17,7 +17,7 @@
         <div class='col'>
             <h3 class='d-inline mr-3'>{{profile.username}}</h3>
             {% if profile.id != user.id %}
-            <form action='/app/follows/{{profile.id}}' method="POST" class='d-inline'>
+            <form action='/app/follow/{{profile.id}}' method="POST" class='d-inline'>
                 {% csrf_token %}
                 {%if follows %}
                 <button class='btn btn-dark rounded-0 mb-1' type='submit'> <i
@@ -44,10 +44,13 @@
         </div>
     </div>
     <hr style='border-color: black'><br>
+    <div class="card-deck mb-3">
+        {% include "mainApp/post_layout.html" %}
+    </div>
 </div>
 
 
-<div class=" card-deck mb-3" style='margin-left: 4%'>
+<!-- <div class=" card-deck mb-3" style='margin-left: 4%'>
     {% for post in posts%}
     <div class='card'>
         <div class="card-header ">
@@ -102,6 +105,6 @@
             </div>
         </div>
     </div>
-    {% endfor %}
-</div>
+    {% endfor %} -->
+
 {% endblock %}

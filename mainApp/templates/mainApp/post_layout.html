@@ -1,0 +1,57 @@
+{% for post in posts %}
+<div class="card mb-3" id={{post.id}}>
+    <div class="card-header mb-1">
+        <div class="row mb-1">
+            <div class='col-sm'>
+                <div class="text" style='font-size: 1.0rem'>{{post.author}}</div>
+                <div class="text" style='font-size: 0.9rem'>{{post.loc}}</div>
+            </div>
+            {% if post.author_id == user.id %}
+            <div class="col-sm text-right">
+                <a href="/app/post/{{post.id}}"><i class="fa fa-edit icon-4x"></i></a>
+                <a href="/app/post_delete/{{post.id}}" type="submit"><i class="fa fa-trash pl-3 icon-4x"></i></a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <img class="card-img-top" src="{{post.image.url}}" alt="Card image cap">
+    <hr class='divider'>
+    <div class="card-body">
+        <h5 class="card-title" style='font-weight: 500'>{{post.title}}</h5>
+        <h6 class='mb-5'>
+            <p class="card-text">{{post.desc}}</p>
+        </h6>
+        <div class='row'>
+            <div class='col-sm'>
+                {% if post.id not in liked_post_ids %}
+                <h4 class='d-inline'><a href='/app/{{post.id}}' class='far fa-thumbs-up'
+                        style='text-decoration:none'>{{post.likes}}</a></h4>
+                {% else %}
+                <h4 class='d-inline'><a href='/app/{{post.id}}' class='fa fa-thumbs-up'
+                        style='text-decoration:none'>{{post.likes}}</a></h4>
+                {% endif %}
+                <h4 class='d-inline pl-1'><a href='' class='far fa-comment' style='text-decoration:none'></a></h4>
+                {% if post.id not in bookmarks %}
+                <h4 class='d-inline pl-1'><a href='/app/bookmark/{{post.id}}' class='far fa-bookmark'
+                        style='text-decoration:none'></a></h4>
+                {% else %}
+                <h4 class='d-inline pl-1' style="color: black;"><a href='/app/bookmark/{{post.id}}'
+                        class='fas fa-bookmark' style='text-decoration:none;'></a>
+                </h4>
+                {% endif %}
+            </div>
+            <div class="col-sm">
+                <p class="card-text float-right pr"><small class="text-muted">{{post.timestamp}}</small></p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Comment" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-dark " type="button">Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}

@@ -54,6 +54,15 @@
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(41, 43, 44, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
         border-color: #292b2c;
     }
+
+    .chat {
+        font-size: 20px;
+    }
+
+    .chat:hover {
+
+        font-size: 25px;
+    }
 </style>
 
 <body style='background-color: #DAE0E6;'>
@@ -115,12 +124,38 @@
         </div>
     </nav>
     <div class="w3-sidebar w3-bar-block w3-card" style="width:25%;right:0;">
-        <h3 class="w3-bar-item" style='background-color: #292b2c; color: white; text-align: center;'>Followers</h3>
-        {% for follower in followers %}
-        <a href="#" class="w3-bar-item w3-button" style='text-decoration: none;'></a>
+        <h3 class="w3-bar-item" style='background-color: #292b2c; color: white; text-align: center;'>Following</h3>
+        {% if user.is_authenticated %}
+        {% for following in following_list %}
+        <a href="/app/profile/{{following.receiver_id}}" class="w3-bar-item w3-button" style='text-decoration: none;'>
+            <div class="row">
+                <div class="col-3">
+                    <img src="{{following.receiver.profile.image.url}}" height="50" class="rounded-circle">
+                </div>
+                <div class="col-7">
+                    <div class="row">
+                        <div class="col">{{following.receiver.username}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-muted">{{following.receiver.profile.desc}}</div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <i class="fa fa-comments chat" aria-hidden="true"></i>
+                </div>
+            </div>
+        </a>
+        <hr class="m-0">
         {% endfor %}
+        {% else %}
+        <div class="row">
+            <div class="col">
+                <p>Login to view the people you follow here!!</p>
+            </div>
+        </div>
     </div>
-
+    {% endif %}
+    </div>
     <div class="container-fluid" style="padding-right: 30%;">
         {% block content %}
 

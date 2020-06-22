@@ -11,6 +11,8 @@
     <center style='font-family: "Roboto Slab", Serif'>Posts</center>
 </h1>
 <div class="container" style="width: 70%">
-    {% include "mainApp/post_layout.html" %}
+    {% for post in posts %}
+        {% include "mainApp/post_layout.html" %}
+    {% endfor %}
 </div>
 {% endblock %}

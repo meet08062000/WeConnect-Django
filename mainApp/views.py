@@ -84,9 +84,11 @@ def like(request, post_id):
 @login_required
 def profile(request, user_id):
     profile = User.objects.filter(id=user_id).get()
-    posts = profile.post_set.all()
-    posts_count = posts.count()
+    posts = Post.objects.all()
+    posts_count = profile.post_set.count()
     likes = list(request.user.like.all())
+    bookmark = list(request.user.bookmark.all())
+    bookmark_ids = [x.post_id for x in bookmark]
     liked_post_ids = [x.post_id for x in likes]
     following_count = Follow.objects.filter(follower_id=profile.id).count()
     follower_count = Follow.objects.filter(receiver_id=profile.id).count()
@@ -103,7 +105,8 @@ def profile(request, user_id):
         'follows': follows,
         'liked_post_ids': liked_post_ids,
         'title': 'User profile',
-        'following_list': request.user.follow.all()
+        'following_list': request.user.follow.all(),
+        'bookmarks': bookmark_ids
     }
     return render(request, 'mainApp/profile.html', context)
 

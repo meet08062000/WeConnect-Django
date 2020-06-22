@@ -2,8 +2,17 @@
 {% load static %}
 
 {% block content %}
+<style>
 
+.card-user{
+    display: inline;
+}
 
+.card-bookmark{
+    display: none;
+}
+
+</style>
 <div class='container' style='width: 70%; margin-top: 2%'>
     <h1>
         <center style='font-family: "Roboto Slab", Serif'>Profile Page</center>
@@ -43,13 +52,58 @@
             <h5 class='d-inline mr-3'>{{profile.profile.desc}} </h5>
         </div>
     </div>
-    <hr style='border-color: black'><br>
-    <div class="card-deck mb-3">
-        {% include "mainApp/post_layout.html" %}
+    <hr style='border-color: black; margin: 0%'><br>
+    <center style='margin-bottom: 3%;'>
+        <div class='d-inline-block mr-4'>
+            <a href='' id='myPost'>
+                <h4>MyPost</h4>
+            </a>
+        </div>
+        <div class='d-inline-block'>
+            <a href='' id='bookmarkPost'>
+                <h4>Bookmark</h4>
+            </a>
+        </div>
+    </center>
+    <div class='card-user'>
+        {% for post in posts %}
+        {% if post.author == user %}
+        <div class="card-deck mb-3">
+            {% include "mainApp/post_layout.html" %}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class='card-bookmark'>
+        {% for post in posts %}
+        {% if post.id in bookmarks %}
+        <div class="card-deck mb-3">
+            {% include "mainApp/post_layout.html" %}
+        </div>
+        {% endif %}
+        {% endfor %}
     </div>
 </div>
 
+<script>
+    $(function () {
+        $('#myPost').on('click', function (e) {
+            $('.card-bookmark').css('display', 'none');
+            $('.card-user').css('display', 'inline');
+            e.preventDefault();
+        });
+    });
 
+    $(function () {
+        $('#bookmarkPost').on('click', function (e) {
+            $('.card-user').css('display', 'none');
+            $('.card-bookmark').css('display', 'inline');
+            e.preventDefault();
+        });
+    });
+
+
+</script>
 <!-- <div class=" card-deck mb-3" style='margin-left: 4%'>
     {% for post in posts%}
     <div class='card'>

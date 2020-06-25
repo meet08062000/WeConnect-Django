@@ -22,22 +22,13 @@
         </h6>
         <div class='row'>
             <div class='col-sm'>
-                {% if post.id not in liked_post_ids %}
-                <h4 class='d-inline'><a href='/app/{{post.id}}' class='far fa-thumbs-up'
-                        style='text-decoration:none'>{{post.likes}}</a></h4>
-                {% else %}
-                <h4 class='d-inline'><a href='/app/{{post.id}}' class='fa fa-thumbs-up'
-                        style='text-decoration:none'>{{post.likes}}</a></h4>
-                {% endif %}
+                <div id="like-section" class="d-inline">
+                    {% include 'mainApp/like_section.html' %}
+                </div>
                 <h4 class='d-inline pl-1'><a href='' class='far fa-comment' style='text-decoration:none'></a></h4>
-                {% if post.id not in bookmarks %}
-                <h4 class='d-inline pl-1'><a href='/app/bookmark/{{post.id}}' class='far fa-bookmark'
-                        style='text-decoration:none'></a></h4>
-                {% else %}
-                <h4 class='d-inline pl-1' style="color: black;"><a href='/app/bookmark/{{post.id}}'
-                        class='fas fa-bookmark' style='text-decoration:none;'></a>
-                </h4>
-                {% endif %}
+                <div id="bookmark-section" class="d-inline">
+                    {% include 'mainApp/bookmark_section.html' %}
+                </div>
             </div>
             <div class="col-sm">
                 <p class="card-text float-right pr"><small class="text-muted">{{post.timestamp}}</small></p>

@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
 from django.db.models.query_utils import Q
 from mainApp.models import Bookmark
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 @login_required
@@ -60,7 +62,8 @@ def createpost(request):
 
 
 @login_required
-def like(request, post_id):
+def like(request):
+    post_id = request.GET['post_id']
     like_count = Like.objects.filter(
         user_id=request.user.id, post_id=post_id).count()
     post = Post.objects.filter(id=post_id).get()
@@ -70,7 +73,9 @@ def like(request, post_id):
         like = Like.objects.filter(
             user_id=request.user.id, post_id=post_id).get()
         like.delete()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        context = {
+            'post': post,
+        }
     else:
         like = Like()
         like.user_id = request.user.id
@@ -78,6 +83,14 @@ def like(request, post_id):
         post.likes += 1
         post.save()
         like.save()
+        context = {
+            'post': post,
+        }
+    if request.is_ajax():
+        html = render_to_string(
+            'mainApp/like_section.html', context, request=request)
+        return JsonResponse({'form': html})
+    else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -189,17 +202,29 @@ def search(request):
 
 
 @login_required
-def bookmark(request, post_id):
+def bookmark(request):
+    post_id = request.GET['post_id']
     bookmark_count = Bookmark.objects.filter(
         user_id=request.user.id, post_id=post_id).count()
+    post = Post.objects.filter(id=post_id).get()
     if(bookmark_count != 0):
         bookmark = Bookmark.objects.filter(
             user_id=request.user.id, post_id=post_id).get()
         bookmark.delete()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        context = {
+            'post': post
+        }
     else:
         bookmark = Bookmark()
         bookmark.user_id = request.user.id
         bookmark.post_id = post_id
         bookmark.save()
+        context = {
+            'post': post
+        }
+    if request.is_ajax():
+        html = render_to_string(
+            'mainApp/bookmark_section.html', context, request=request)
+        return JsonResponse({'form': html})
+    else:
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

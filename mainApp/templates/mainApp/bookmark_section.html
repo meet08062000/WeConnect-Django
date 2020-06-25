@@ -1,0 +1,8 @@
+{% if post.id not in bookmarks %}
+<h4 class='d-inline pl-1'><a value={{post.id}} id="bookmark" class='far fa-bookmark' style='text-decoration:none'></a>
+</h4>
+{% else %}
+<h4 class='d-inline pl-1' style="color: black;"><a value={{post.id}} id="bookmark" class='fas fa-bookmark'
+        style='text-decoration:none;'></a>
+</h4>
+{% endif %}

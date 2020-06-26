@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
 from django.db.models.query_utils import Q
-from mainApp.models import Bookmark
+from mainApp.models import Bookmark, Comment
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
@@ -241,3 +241,32 @@ def bookmark(request):
                 'mainApp/bookmark_section.html', context, request=request)
             return JsonResponse({'form': html})
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def comment(request, post_id):
+    if request.method.lower() == 'post':
+        message = request.POST['message']
+        post = Post.objects.filter(id=post_id).get()
+        comment = Comment()
+        comment.message = message
+        comment.user = request.user
+        comment.post = post
+        comment.save()
+        return redirect('post_page', post_id)
+    return redirect('post_page', post_id)
+
+
+def post_page(request, post_id):
+    post = Post.objects.filter(id=post_id).get()
+    liked_posts = list(request.user.like.all())
+    liked_post_ids = [x.post_id for x in liked_posts]
+    bookmark = list(request.user.bookmark.all())
+    bookmark_ids = [x.post_id for x in bookmark]
+    comments = post.comment.all()
+    context = {
+        'post': post,
+        'liked_post_ids': liked_post_ids,
+        'bookmarks': bookmark_ids,
+        'comments': sorted(comments, key=lambda x: x.timestamp, reverse=True)
+    }
+    return render(request, 'mainApp/post_page.html', context)

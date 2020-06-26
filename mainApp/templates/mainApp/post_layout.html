@@ -25,7 +25,8 @@
                 <div id="like-section" class="d-inline">
                     {% include 'mainApp/like_section.html' %}
                 </div>
-                <h4 class='d-inline pl-1'><a href='' class='far fa-comment' style='text-decoration:none'></a></h4>
+                <h4 class='d-inline pl-1'><a href='{% url "comment" post.id %}' class='far fa-comment'
+                        style='text-decoration:none'></a></h4>
                 <div id="bookmark-section" class="d-inline">
                     {% include 'mainApp/bookmark_section.html' %}
                 </div>
@@ -36,11 +37,15 @@
         </div>
     </div>
     <div class="card-footer">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Comment" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-dark " type="button">Post</button>
+        <form action="{% url 'comment' post.id %}" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Comment" name='message'
+                    aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-dark" type="submit">Post</button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>

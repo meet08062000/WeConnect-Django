@@ -1,0 +1,7 @@
+{%if follows %}
+<button class='btn btn-dark rounded-0 mb-1' type='submit' id='follow' value={{profile.id}}> <i
+        class='fas fa-user-minus'></i></button><br><br>
+{% else %}
+<button class='btn btn-dark rounded-0 mb-1' type='submit' id='follow' value={{profile.id}}><i
+        class='fas fa-user-plus'></i></button><br><br>
+{% endif %}

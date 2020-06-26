@@ -61,5 +61,6 @@ class Comment(models.Model):
         User, on_delete=models.CASCADE, related_name='comment')
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name='comment')
+    reply = models.ForeignKey('Comment', null=True, related_name='replies', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)

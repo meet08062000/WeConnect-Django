@@ -138,7 +138,7 @@
                         <div class="col">{{following.receiver.username}}</div>
                     </div>
                     <div class="row">
-                        <div class="col text-muted">{{following.receiver.profile.desc}}</div>
+                        <div class="col text-muted" style="font-size: 0.95vw">{{following.receiver.profile.desc}}</div>
                     </div>
                 </div>
                 <div class="col-2">
@@ -169,7 +169,7 @@
                 event.preventDefault();
                 var pk = $(this).attr('value');
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: '{% url "like" %}',
                     data: {
                         'post_id': pk,
@@ -191,7 +191,7 @@
                 event.preventDefault();
                 var pk = $(this).attr('value');
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: '{% url "bookmark" %}',
                     data: {
                         'post_id': pk,
@@ -208,6 +208,29 @@
                     }
                 });
             });
+
+            $(document).on('click', '#follow', function (event) {
+                event.preventDefault();
+                var pk = $(this).attr('value');
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "follow" %}',
+                    data: {
+                        'user_id': pk,
+                        'csrfmiddlewaretoken': "{{ csrf_token }}"
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#follow-section').html(response['form']);
+                        console.log($('#follow-section').html(response['form']));
+                        window.location.reload()
+                    },
+                    error: function (res, e) {
+                        console.log(res.responseText);
+                    }
+                });
+            });
+
         });
     </script>
 

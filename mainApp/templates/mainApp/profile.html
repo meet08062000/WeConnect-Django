@@ -3,15 +3,13 @@
 
 {% block content %}
 <style>
+    .card-user {
+        display: inline;
+    }
 
-.card-user{
-    display: inline;
-}
-
-.card-bookmark{
-    display: none;
-}
-
+    .card-bookmark {
+        display: none;
+    }
 </style>
 <div class='container' style='width: 70%; margin-top: 2%'>
     <h1>
@@ -26,16 +24,9 @@
         <div class='col'>
             <h3 class='d-inline mr-3'>{{profile.username}}</h3>
             {% if profile.id != user.id %}
-            <form action='/app/follow/{{profile.id}}' method="POST" class='d-inline'>
-                {% csrf_token %}
-                {%if follows %}
-                <button class='btn btn-dark rounded-0 mb-1' type='submit'> <i
-                        class='fas fa-user-minus'></i></button><br><br>
-                {% else %}
-                <button class='btn btn-dark rounded-0 mb-1' type='submit'><i
-                        class='fas fa-user-plus'></i></button><br><br>
-                {% endif %}
-            </form>
+                <div id="follow-section" class="d-inline">
+                    {% include 'mainApp/follow_section.html' %}
+                </div>
             {% endif %}
             {% if profile.id == user.id %}
             <a href="{% url 'editprofile' %}"><button type='submit' name='edit_user'
@@ -53,6 +44,7 @@
         </div>
     </div>
     <hr style='border-color: black; margin: 0%'><br>
+    {% if profile.id == user.id %}
     <center style='margin-bottom: 3%;'>
         <div class='d-inline-block mr-4'>
             <a href='' id='myPost'>
@@ -65,23 +57,34 @@
             </a>
         </div>
     </center>
-    <div class='card-user'>
-        {% for post in posts %}
-        {% if post.author == user %}
-        <div class="card-deck mb-3">
-            {% include "mainApp/post_layout.html" %}
+    {% endif %}
+    {% if profile == user %}
+        <div class='card-user'>
+            {% for post in posts %}
+                {% if post.author == user %}
+                <div class="card-deck mb-3">
+                    {% include "mainApp/post_layout.html" %}
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-    <div class='card-bookmark'>
+        <div class='card-bookmark'>
+            {% for post in posts %}
+                {% if post.id in bookmarks %}
+                    <div class="card-deck mb-3">
+                    {% include "mainApp/post_layout.html" %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+    {% else %}
         {% for post in posts %}
-        {% if post.id in bookmarks %}
-        <div class="card-deck mb-3">
-            {% include "mainApp/post_layout.html" %}
-        </div>
-        {% endif %}
+            {% if post.author == profile %}
+                <div class="card-deck mb-3">
+                {% include "mainApp/post_layout.html" %}
+                </div>
+            {% endif %}
         {% endfor %}
+    {% endif %}
     </div>
 </div>
 

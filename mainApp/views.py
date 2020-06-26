@@ -63,35 +63,35 @@ def createpost(request):
 
 @login_required
 def like(request):
-    post_id = request.GET['post_id']
-    like_count = Like.objects.filter(
-        user_id=request.user.id, post_id=post_id).count()
-    post = Post.objects.filter(id=post_id).get()
-    if(like_count != 0):
-        post.likes -= 1
-        post.save()
-        like = Like.objects.filter(
-            user_id=request.user.id, post_id=post_id).get()
-        like.delete()
-        context = {
-            'post': post,
-        }
-    else:
-        like = Like()
-        like.user_id = request.user.id
-        like.post_id = post_id
-        post.likes += 1
-        post.save()
-        like.save()
-        context = {
-            'post': post,
-        }
-    if request.is_ajax():
-        html = render_to_string(
-            'mainApp/like_section.html', context, request=request)
-        return JsonResponse({'form': html})
-    else:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if(request.method.lower() == 'post'):
+        post_id = request.POST['post_id']
+        like_count = Like.objects.filter(
+            user_id=request.user.id, post_id=post_id).count()
+        post = Post.objects.filter(id=post_id).get()
+        if(like_count != 0):
+            post.likes -= 1
+            post.save()
+            like = Like.objects.filter(
+                user_id=request.user.id, post_id=post_id).get()
+            like.delete()
+            context = {
+                'post': post,
+            }
+        else:
+            like = Like()
+            like.user_id = request.user.id
+            like.post_id = post_id
+            post.likes += 1
+            post.save()
+            like.save()
+            context = {
+                'post': post,
+            }
+        if request.is_ajax():
+            html = render_to_string(
+                'mainApp/like_section.html', context, request=request)
+            return JsonResponse({'form': html})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -125,19 +125,32 @@ def profile(request, user_id):
 
 
 @login_required
-def follow(request, user_id):
+def follow(request):
     if(request.method.lower() == "post"):
+        user_id = request.POST['user_id']
+        user = User.objects.filter(id=user_id)
         follow_count = Follow.objects.filter(
             follower=request.user.id, receiver=user_id).count()
         if (follow_count != 0):
             follow = request.user.follow.filter(receiver_id=user_id).delete()
-            return redirect('/app/profile/{}'.format(user_id))
+            context = {
+                'profile': user,
+                'follows': False
+            }
         else:
             follow = Follow()
             follow.follower_id = request.user.id
             follow.receiver_id = user_id
             follow.save()
-            return redirect('/app/profile/{}'.format(user_id))
+            context = {
+                'profile': user,
+                'follows': True
+            }
+        if request.is_ajax():
+            html = render_to_string(
+                'mainApp/follow_section.html', context, request=request)
+            return JsonResponse({'form': html})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -203,28 +216,28 @@ def search(request):
 
 @login_required
 def bookmark(request):
-    post_id = request.GET['post_id']
-    bookmark_count = Bookmark.objects.filter(
-        user_id=request.user.id, post_id=post_id).count()
-    post = Post.objects.filter(id=post_id).get()
-    if(bookmark_count != 0):
-        bookmark = Bookmark.objects.filter(
-            user_id=request.user.id, post_id=post_id).get()
-        bookmark.delete()
-        context = {
-            'post': post
-        }
-    else:
-        bookmark = Bookmark()
-        bookmark.user_id = request.user.id
-        bookmark.post_id = post_id
-        bookmark.save()
-        context = {
-            'post': post
-        }
-    if request.is_ajax():
-        html = render_to_string(
-            'mainApp/bookmark_section.html', context, request=request)
-        return JsonResponse({'form': html})
-    else:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if(request.method.lower() == 'post'):
+        post_id = request.POST['post_id']
+        bookmark_count = Bookmark.objects.filter(
+            user_id=request.user.id, post_id=post_id).count()
+        post = Post.objects.filter(id=post_id).get()
+        if(bookmark_count != 0):
+            bookmark = Bookmark.objects.filter(
+                user_id=request.user.id, post_id=post_id).get()
+            bookmark.delete()
+            context = {
+                'post': post
+            }
+        else:
+            bookmark = Bookmark()
+            bookmark.user_id = request.user.id
+            bookmark.post_id = post_id
+            bookmark.save()
+            context = {
+                'post': post
+            }
+        if request.is_ajax():
+            html = render_to_string(
+                'mainApp/bookmark_section.html', context, request=request)
+            return JsonResponse({'form': html})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

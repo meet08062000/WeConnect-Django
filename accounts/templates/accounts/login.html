@@ -1,5 +1,7 @@
 {% extends 'mainApp/base.html' %}
 {% load crispy_forms_tags %}
+{% load socialaccount %}
+{% providers_media_js %}
 
 {% block content %}
 <div class="content-section mt-3" style="z-index: 1;background-color: white">
@@ -10,6 +12,9 @@
         </fieldset>
         <div class="form-group text-center">
             <button type="submit" class="btn btn-outline-info">Login</button>
+        </div>
+        <div class="text-center">
+            <a href="{% provider_login_url 'google' %}"><h3><i class='fab fa-google text-lg'></i></h3></a>
         </div>
     </form>
     <div class="border-top pt-3 text-center">

@@ -188,7 +188,7 @@ def editprofile(request):
         user.email = request.POST['email']
         user.profile.desc = request.POST['desc']
         user.save()
-        return redirect('/app')
+        return redirect('profile', request.user.id)
     else:
         user = request.user
         return render(request, 'mainApp/editprofile.html', {'title': 'Edit profile', 'following_list': request.user.follow.all()})

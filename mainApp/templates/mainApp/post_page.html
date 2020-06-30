@@ -26,14 +26,14 @@
         <div class="row">
             <div class="col-9">
                 <div class='float-right mr-3' style='width: auto'>
-                    <button class="btn btn-outline-dark" data-toggle="collapse" href="#collapsewithlink" role="button"
-                        aria-expanded="false" aria-controls="collapsewithlink">Reply</button>
-                    <div class="collapse float-right ml-2" id="collapsewithlink">
+                    <button class="btn btn-outline-dark" role="button" aria-expanded="false" value="{{comment.id}}"
+                        onclick="reply(this.value)">Reply</button>
+                    <div class="float-right ml-2 d-none" id="{{comment.id}}">
                         <form action="{% url 'comment' post.id %}" method="post">
                             {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Comment" name='message'
-                                    aria-describedby="basic-addon2">
+                                    aria-describedby="basic-addon2" required=true>
                                 <div class="input-group-append">
                                     <button class="btn btn-dark" type="submit">Post</button>
                                 </div>
@@ -49,4 +49,14 @@
     </div>
     {% endfor %}
 </div>
+<script type="text/javascript">
+    function reply(reply_id) {
+        console.log(reply_id)
+        replyField = document.getElementById(reply_id);
+        if (replyField.classList.contains('d-none'))
+            replyField.classList.replace('d-none', 'd-inline');
+        else if (replyField.classList.contains('d-inline'))
+            replyField.classList.replace('d-inline', 'd-none');
+    }
+</script>
 {% endblock %}

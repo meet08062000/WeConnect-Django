@@ -61,6 +61,20 @@ class Comment(models.Model):
         User, on_delete=models.CASCADE, related_name='comment')
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE, related_name='comment')
-    reply = models.ForeignKey('Comment', null=True, related_name='replies', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.message
+
+
+class Reply(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='reply')
+    comment = models.ForeignKey(
+        Comment, on_delete=models.CASCADE, related_name='replies')
+    message = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.message

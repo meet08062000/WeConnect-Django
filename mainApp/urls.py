@@ -15,5 +15,6 @@ urlpatterns = [
     path('editprofile', views.editprofile, name="editprofile"),
     path('bookmark', views.bookmark, name='bookmark'),
     path('comment/<int:post_id>', views.comment, name='comment'),
+    path('reply/<int:post_id>/<int:comment_id>', views.reply, name='reply'),
     path('post_page/<int:post_id>', views.post_page, name='post_page')
 ]

@@ -10,10 +10,10 @@
             <div class="col-1">
                 <img src="{{comment.user.profile.image.url}}" height="30" class="rounded-circle">
             </div>
-            <div class="col-1">
+            <div class="col-4">
                 <b>{{comment.user.username}}</b>
             </div>
-            <div class="col-10 text-muted">
+            <div class="col-7 text-muted">
                 <p class="float-right">{{comment.timestamp}}</p>
 
             </div>
@@ -29,7 +29,7 @@
                     <button class="btn btn-outline-dark" role="button" aria-expanded="false" value="{{comment.id}}"
                         onclick="reply(this.value)">Reply</button>
                     <div class="float-right ml-2 d-none" id="{{comment.id}}">
-                        <form action="{% url 'comment' post.id %}" method="post">
+                        <form action="{% url 'reply' post_id=post.id comment_id=comment.id %}" method="post">
                             {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Comment" name='message'
@@ -43,20 +43,50 @@
                 </div>
             </div>
             <div class="col-3">
-                <button class='btn btn-outline-dark float-right'>View Replies</button>
+                <button class='btn btn-outline-dark float-right' value={{comment.id}}
+                    onclick="view_replies(this.value)">View Replies</button>
+            </div>
+            <div class="container-fluid d-none ml-5" name="{{comment.id}}">
+                {% for reply in comment.replies.all %}
+                <div class='p-3' style='background-color: #e6e6e6'>
+                    <div class="row my-1">
+                        <div class="col-1">
+                            <img src="{{reply.user.profile.image.url}}" height="30" class="rounded-circle">
+                        </div>
+                        <div class="col-4">
+                            <b>{{reply.user.username}}</b>
+                        </div>
+                        <div class="col-7 text-muted">
+                            <p class="float-right">{{reply.timestamp}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="mx-4">{{reply.message}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
 <script type="text/javascript">
-    function reply(reply_id) {
-        console.log(reply_id)
-        replyField = document.getElementById(reply_id);
+    function reply(comment_id) {
+        replyField = document.getElementById(comment_id);
         if (replyField.classList.contains('d-none'))
             replyField.classList.replace('d-none', 'd-inline');
         else if (replyField.classList.contains('d-inline'))
             replyField.classList.replace('d-inline', 'd-none');
+    }
+
+    function view_replies(comment_id) {
+        replyList = document.getElementsByName(comment_id);
+        if (replyList[0].classList.contains('d-none'))
+            replyList[0].classList.replace('d-none', 'd-inline');
+        else if (replyList[0].classList.contains('d-inline'))
+            replyList[0].classList.replace('d-inline', 'd-none');
     }
 </script>
 {% endblock %}

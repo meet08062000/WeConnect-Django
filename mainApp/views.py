@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector
 from django.db.models.query_utils import Q
-from mainApp.models import Bookmark, Comment
+from mainApp.models import Bookmark, Comment, Reply
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
@@ -252,6 +252,19 @@ def comment(request, post_id):
         comment.user = request.user
         comment.post = post
         comment.save()
+        return redirect('post_page', post_id)
+    return redirect('post_page', post_id)
+
+
+def reply(request, post_id, comment_id):
+    if request.method.lower() == 'post':
+        message = request.POST['message']
+        comment = Comment.objects.filter(id=comment_id).get()
+        reply = Reply()
+        reply.message = message
+        reply.user = request.user
+        reply.comment = comment
+        reply.save()
         return redirect('post_page', post_id)
     return redirect('post_page', post_id)
 

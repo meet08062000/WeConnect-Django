@@ -94,6 +94,7 @@ def like(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def like_comment(request):
     if(request.method.lower() == 'post'):
         comment_id = request.POST['comment_id']
@@ -126,6 +127,7 @@ def like_comment(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def like_reply(request):
     if(request.method.lower() == 'post'):
         reply_id = request.POST['reply_id']
@@ -258,11 +260,13 @@ def editprofile(request):
         return render(request, 'mainApp/editprofile.html', {'title': 'Edit profile', 'following_list': request.user.follow.all()})
 
 
+@login_required
 def post_delete(request, post_id):
     post = Post.objects.filter(id=post_id).get()
     # if(post.image):
     #     post.image.delete()
-    post.delete()
+    if(post.user == request.user):
+        post.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -319,6 +323,7 @@ def bookmark(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def comment(request, post_id):
     if request.method.lower() == 'post':
         message = request.POST['message']
@@ -332,6 +337,7 @@ def comment(request, post_id):
     return redirect('post_page', post_id)
 
 
+@login_required
 def reply(request, post_id, comment_id):
     if request.method.lower() == 'post':
         message = request.POST['message']
@@ -345,6 +351,7 @@ def reply(request, post_id, comment_id):
     return redirect('post_page', post_id)
 
 
+@login_required
 def post_page(request, post_id):
     post = Post.objects.filter(id=post_id).get()
     liked_posts = list(request.user.like.all())
@@ -370,6 +377,14 @@ def post_page(request, post_id):
 @login_required
 def comment_delete(request, comment_id):
     comment = Comment.objects.filter(id=comment_id).get()
-    if request.user.id == comment.user.id:
+    if request.user == comment.user:
         comment.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def reply_delete(request, reply_id):
+    reply = Reply.objects.filter(id=reply_id).get()
+    if request.user == reply.user:
+        reply.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

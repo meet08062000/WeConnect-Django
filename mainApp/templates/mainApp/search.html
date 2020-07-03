@@ -5,20 +5,37 @@
 <h1>
     <center style='font-family: "Roboto Slab", Serif'>Results</center>
 </h1>
-{% for result in results %}
-<a href="/app/profile/{{result.id}}" style='text-decoration: none'>
+{% for profile in results %}
+<a href="/app/profile/{{profile.id}}" style='text-decoration: none'>
     <div class="card mb-4">
         <div class="card-header">
-            <h2>{{result.username}}</h2>
+            <div class="row">
+                <div class="col">
+                    <h2>{{profile.username}}</h2>
+                </div>
+                <div class="col float-right pt-3">
+                    {% if profile.id != user.id %}
+                    <div id="follow-section" class="d-inline float-right">
+                        {% include 'mainApp/follow_section.html' %}
+                    </div>
+                    {% endif %}
+                    {% if profile.id == user.id %}
+                    <a href="{% url 'editprofile' %}"><button type='submit' name='edit_user'
+                            class='btn btn-light border border-dark d-inline float-right' style='margin-bottom:4%'>
+                            <i class='fa fa-edit'></i>
+                        </button></a><br>
+                    {% endif %}
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col">
-                    <img src="{{result.profile.image.url}}" alt='Profile Pic' width=100px height=100px>
+                    <img src="{{profile.profile.image.url}}" alt='Profile Pic' width=100px height=100px>
                 </div>
                 <div class="col">
-                    <h3>{{result.first_name}} {{result.last_name}}</h3>
-                    <p class="text-muted">{{result.profile.desc}}</p>
+                    <h3>{{profile.first_name}} {{profile.last_name}}</h3>
+                    <p class="text-muted">{{profile.profile.desc}}</p>
                 </div>
             </div>
         </div>

@@ -94,6 +94,70 @@ def like(request):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+def like_comment(request):
+    if(request.method.lower() == 'post'):
+        comment_id = request.POST['comment_id']
+        like_count = Like.objects.filter(
+            user_id=request.user.id, comment_id=comment_id).count()
+        comment = Comment.objects.filter(id=comment_id).get()
+        if(like_count != 0):
+            comment.likes -= 1
+            comment.save()
+            like = Like.objects.filter(
+                user_id=request.user.id, comment_id=comment_id).get()
+            like.delete()
+            context = {
+                'comment': comment,
+            }
+        else:
+            like = Like()
+            like.user_id = request.user.id
+            like.comment_id = comment_id
+            comment.likes += 1
+            comment.save()
+            like.save()
+            context = {
+                'comment': comment,
+            }
+        if request.is_ajax():
+            html = render_to_string(
+                'mainApp/like_comment_section.html', context, request=request)
+            return JsonResponse({'form': html})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def like_reply(request):
+    if(request.method.lower() == 'post'):
+        reply_id = request.POST['reply_id']
+        like_count = Like.objects.filter(
+            user_id=request.user.id, reply_id=reply_id).count()
+        reply = Reply.objects.filter(id=reply_id).get()
+        if(like_count != 0):
+            reply.likes -= 1
+            reply.save()
+            like = Like.objects.filter(
+                user_id=request.user.id, reply_id=reply_id).get()
+            like.delete()
+            context = {
+                'reply': reply,
+            }
+        else:
+            like = Like()
+            like.user_id = request.user.id
+            like.reply_id = reply_id
+            reply.likes += 1
+            reply.save()
+            like.save()
+            context = {
+                'reply': reply,
+            }
+        if request.is_ajax():
+            html = render_to_string(
+                'mainApp/like_reply_section.html', context, request=request)
+            return JsonResponse({'form': html})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 @login_required
 def profile(request, user_id):
     profile = User.objects.filter(id=user_id).get()
@@ -273,13 +337,24 @@ def post_page(request, post_id):
     post = Post.objects.filter(id=post_id).get()
     liked_posts = list(request.user.like.all())
     liked_post_ids = [x.post_id for x in liked_posts]
+    liked_comments = list(request.user.like.all())
+    liked_comment_ids = [x.comment_id for x in liked_comments]
+    liked_replies = list(request.user.like.all())
+    liked_reply_ids = [x.reply_id for x in liked_replies]
     bookmark = list(request.user.bookmark.all())
     bookmark_ids = [x.post_id for x in bookmark]
     comments = post.comment.all()
     context = {
         'post': post,
         'liked_post_ids': liked_post_ids,
+        'liked_comment_ids': liked_comment_ids,
+        'liked_reply_ids': liked_reply_ids,
         'bookmarks': bookmark_ids,
         'comments': sorted(comments, key=lambda x: x.timestamp, reverse=True)
     }
     return render(request, 'mainApp/post_page.html', context)
+
+
+def comment_delete(request,comment_id):
+    comment = Comment.objects.filter(comment_id )
+    

@@ -35,13 +35,6 @@ class Post(models.Model):
         storage.delete(path)
 
 
-class Like(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='like')
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='like')
-
-
 class Follow(models.Model):
     follower = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='follow')
@@ -63,6 +56,7 @@ class Comment(models.Model):
         Post, on_delete=models.CASCADE, related_name='comment')
     message = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
+    likes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.message
@@ -75,6 +69,18 @@ class Reply(models.Model):
         Comment, on_delete=models.CASCADE, related_name='replies')
     message = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
+    likes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.message
+
+
+class Like(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='like')
+    post = models.ForeignKey(
+        Post, null=True, on_delete=models.CASCADE, related_name='like')
+    comment = models.ForeignKey(
+        Comment, null=True, on_delete=models.CASCADE, related_name='like')
+    reply = models.ForeignKey(
+        Reply, null=True, on_delete=models.CASCADE, related_name='like')

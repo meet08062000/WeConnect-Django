@@ -8,14 +8,20 @@
     <div class='p-3' style='background-color: #e6e6e6'>
         <div class="row my-1">
             <div class="col-1">
-                <img src="{{comment.user.profile.image.url}}" height="30" class="rounded-circle">
+                <img src="{{comment.user.profile.image.url}}" height="30" width="30" class="rounded-circle">
             </div>
             <div class="col-4">
-                <b>{{comment.user.username}}</b>
+                <a href="{% url 'profile' comment.user.id %}"><b>{{comment.user.username}}</b></a>
             </div>
-            <div class="col-7 text-muted">
-                <p class="float-right">{{comment.timestamp}}</p>
-
+            <div class="col-7">
+                {% if comment.user_id == user.id %}
+                <div class="float-right d-inline">
+                    <button onclick='edit_comment(this.value)' value='{{comment.id}}'><i
+                            class="fa fa-edit icon-4x"></i></button>
+                    <a href="/app/comment_delete/{{comment.id}}" type="submit"><i class="fa fa-trash pl-3 icon-4x"></i></a>
+                </div>
+                {% endif %}
+                <p class="float-right text-muted d-inline mr-3">{{comment.timestamp}}</p>
             </div>
         </div>
         <div class="row">
@@ -24,7 +30,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-9">
+            <div class="col-1">
+                <div id="like-comment-section">
+                    {% include 'mainApp/like_comment_section.html' %}
+                </div>
+            </div>
+            <div class="col-8">
                 <div class='float-right mr-3' style='width: auto'>
                     <button class="btn btn-outline-dark" role="button" aria-expanded="false" value="{{comment.id}}"
                         onclick="reply(this.value)">Reply</button>
@@ -66,6 +77,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <div id="like-reply-section">
+                            {% include 'mainApp/like_reply_section.html' %}
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
@@ -88,5 +106,13 @@
         else if (replyList[0].classList.contains('d-inline'))
             replyList[0].classList.replace('d-inline', 'd-none');
     }
+    function edit_comment(comment_id) {
+        edit = document.getElementById(comment_id);
+        if (edit.classList.contains('d-none'))
+            edit.classList.replace('d-none', 'd-inline');
+        else if (edit.classList.contains('d-inline'))
+            edit.classList.replace('d-inline', 'd-none');
+    }
+
 </script>
 {% endblock %}

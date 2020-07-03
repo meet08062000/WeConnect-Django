@@ -119,7 +119,7 @@
             </ul>
             <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method='GET'>
                 <input class="form-control mr-sm-2 rounded-0" type="search" placeholder="Search" aria-label="Search"
-                    name='search'>
+                    name='search' required='true'>
                 <button class="btn btn-light border-dark my-2 my-sm-0 rounded-0" type="submit">Search</button>
             </form>
         </div>
@@ -179,6 +179,48 @@
                     success: function (response) {
                         $('#like-section').html(response['form']);
                         console.log($('#like-section').html(response['form']));
+                        window.location.reload()
+                    },
+                    error: function (res, e) {
+                        console.log(res.responseText);
+                    }
+                });
+            });
+            $(document).on('click', '#like_comment', function (event) {
+                event.preventDefault();
+                var pk = $(this).attr('value');
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "like_comment" %}',
+                    data: {
+                        'comment_id': pk,
+                        'csrfmiddlewaretoken': "{{ csrf_token }}"
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#like-comment-section').html(response['form']);
+                        console.log($('#like-comment-section').html(response['form']));
+                        window.location.reload()
+                    },
+                    error: function (res, e) {
+                        console.log(res.responseText);
+                    }
+                });
+            });
+            $(document).on('click', '#like_reply', function (event) {
+                event.preventDefault();
+                var pk = $(this).attr('value');
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "like_reply" %}',
+                    data: {
+                        'reply_id': pk,
+                        'csrfmiddlewaretoken': "{{ csrf_token }}"
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#like-reply-section').html(response['form']);
+                        console.log($('#like-reply-section').html(response['form']));
                         window.location.reload()
                     },
                     error: function (res, e) {

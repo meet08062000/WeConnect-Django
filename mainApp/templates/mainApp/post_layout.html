@@ -1,8 +1,13 @@
 <div class="card mb-3" id={{post.id}}>
     <div class="card-header mb-1">
         <div class="row mb-1">
+            <div class="col-sm-1">
+                <img src="{{post.author.profile.image.url}}" height="30" width="30" class="rounded-circle">
+            </div>
             <div class='col-sm'>
-                <div class="text" style='font-size: 1.0rem'>{{post.author}}</div>
+                <div class="text" style='font-size: 1.0rem'>
+                    <a href="{% url 'profile' post.author.id %}"><b>{{post.author}}</b></a>
+                </div>
                 <div class="text" style='font-size: 0.9rem'>{{post.loc}}</div>
             </div>
             {% if post.author_id == user.id %}

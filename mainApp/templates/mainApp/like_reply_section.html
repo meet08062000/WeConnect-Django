@@ -1,0 +1,7 @@
+{% if reply.id not in liked_reply_ids %}
+<h4 class='d-inline'><a href="" id='like_reply' value={{reply.id}} class='far fa-thumbs-up'
+        style='text-decoration:none'>{{reply.likes}}</a></h4>
+{% else %}
+<h4 class='d-inline'><a href="" id='like_reply' value={{reply.id}} class='fa fa-thumbs-up'
+        style='text-decoration:none'>{{reply.likes}}</a></h4>
+{% endif %}

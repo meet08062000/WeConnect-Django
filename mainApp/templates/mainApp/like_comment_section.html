@@ -1,0 +1,7 @@
+{% if comment.id not in liked_comment_ids %}
+<h4 class='d-inline'><a href="" id='like_comment' value={{comment.id}} class='far fa-thumbs-up'
+        style='text-decoration:none'>{{comment.likes}}</a></h4>
+{% else %}
+<h4 class='d-inline'><a href="" id='like_comment' value={{comment.id}} class='fa fa-thumbs-up'
+        style='text-decoration:none'>{{comment.likes}}</a></h4>
+{% endif %}

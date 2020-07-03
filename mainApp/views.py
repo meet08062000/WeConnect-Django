@@ -271,8 +271,20 @@ def search(request):
     search = request.GET['search']
     results = User.objects.filter(Q(first_name__contains=search) | Q(
         username__contains=search) | Q(last_name__contains=search) | Q(email__contains=search))
+    follow_list = []
+    i = 0
+    for user in results:
+        user_id = user.id
+        if(request.user.follow.filter(receiver_id=user_id).count() != 0):
+            follow_list.append(user_id)
+        i += 1
+    context = {
+        'results': results,
+        'following_list': request.user.follow.all(),
+        'follow_list': follow_list
+    }
     if results is not None:
-        return render(request, 'mainApp/search.html', {'results': results, 'following_list': request.user.follow.all()})
+        return render(request, 'mainApp/search.html', context)
     else:
         messages.info(request, 'No results found!')
         return redirect('dashboard')
@@ -355,6 +367,9 @@ def post_page(request, post_id):
     return render(request, 'mainApp/post_page.html', context)
 
 
-def comment_delete(request,comment_id):
-    comment = Comment.objects.filter(comment_id )
-    
+@login_required
+def comment_delete(request, comment_id):
+    comment = Comment.objects.filter(id=comment_id).get()
+    if request.user.id == comment.user.id:
+        comment.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

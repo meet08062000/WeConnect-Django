@@ -16,7 +16,15 @@
                 <div class="col float-right pt-3">
                     {% if profile.id != user.id %}
                     <div id="follow-section" class="d-inline float-right">
+                        {% if profile.id in follow_list %}
+                        {% with follows=True %}
                         {% include 'mainApp/follow_section.html' %}
+                        {% endwith %}
+                        {% else %}
+                        {% with follows=False %}
+                        {% include 'mainApp/follow_section.html' %}
+                        {% endwith %}
+                        {% endif %}
                     </div>
                     {% endif %}
                     {% if profile.id == user.id %}

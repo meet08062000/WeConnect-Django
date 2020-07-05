@@ -28,11 +28,14 @@ class Post(models.Model):
 
     def delete(self, *args, **kwargs):
         # You have to prepare what you need before delete the model
-        storage, path = self.media.storage, self.media.path
+        path = ''
+        if self.media:
+            storage, path = self.media.storage, self.media.path
         # Delete the model before the file
         super(Post, self).delete(*args, **kwargs)
         # Delete the file after the model
-        storage.delete(path)
+        if path:
+            storage.delete(path)
 
 
 class Follow(models.Model):

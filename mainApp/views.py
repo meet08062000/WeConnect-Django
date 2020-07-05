@@ -39,9 +39,12 @@ def createpost(request):
         post = Post()
         post.title = request.POST['title']
         post.desc = request.POST['desc']
-        post.image = request.FILES['image']
-        post.loc = request.POST['loc']
-        post.tags = request.POST['tags']
+        if(request.FILES):
+            post.media = request.FILES['media']
+        if(request.POST['loc']):
+            post.loc = request.POST['loc']
+        if(request.POST['tags']):
+            post.tags = request.POST['tags']
         post.author_id = request.user.id
         post.save()
         return redirect('/app')
@@ -49,7 +52,7 @@ def createpost(request):
         post = Post()
         post.title = ''
         post.desc = ''
-        post.image = ''
+        post.media = ''
         post.loc = ''
         post.tags = ''
         post.author_id = ''
@@ -227,7 +230,7 @@ def editpost(request, post_id):
         post.title = request.POST['title']
         post.desc = request.POST['desc']
         if(request.FILES):
-            post.image = request.FILES['image']
+            post.media = request.FILES['image']
         post.loc = request.POST['loc']
         post.tags = request.POST['tags']
         post.save()
@@ -263,9 +266,9 @@ def editprofile(request):
 @login_required
 def post_delete(request, post_id):
     post = Post.objects.filter(id=post_id).get()
-    # if(post.image):
-    #     post.image.delete()
-    if(post.user == request.user):
+    # if(post.media):
+    #     post.media.delete()
+    if(post.author == request.user):
         post.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

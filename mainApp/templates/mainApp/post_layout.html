@@ -27,7 +27,7 @@
     {% if media_list|last == 'jpg' or media_list|last == 'jpeg' or media_list|last == 'png' or media_list|last == 'gif' or media_list|last == 'tiff' %}
     <img class="card-img-top" src="{{post.media.url}}" alt="Card image cap">
     {% elif media_list|last == 'mp4' or media_list|last == 'mkv' or media_list|last == 'mov' %}
-    <video src="{{post.media.url}}" controls height="400"></video>
+    <video src="{{post.media.url}}" controls height="400" autoplay="true" loop="true"></video>
     {% endif %}
     {% endwith %}
     {% endif %}

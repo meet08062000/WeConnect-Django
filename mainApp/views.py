@@ -230,9 +230,11 @@ def editpost(request, post_id):
         post.title = request.POST['title']
         post.desc = request.POST['desc']
         if(request.FILES):
-            post.media = request.FILES['image']
-        post.loc = request.POST['loc']
-        post.tags = request.POST['tags']
+            post.media = request.FILES['media']
+        if(request.POST['loc']):
+            post.loc = request.POST['loc']
+        if(request.POST['tags']):
+            post.tags = request.POST['tags']
         post.save()
         return redirect('/app')
     else:

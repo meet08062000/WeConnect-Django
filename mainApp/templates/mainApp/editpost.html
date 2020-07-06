@@ -1,4 +1,5 @@
 {% extends 'mainApp/base.html' %}
+{% load split %}
 
 {% block content %}
 <div class='container' style='width: 50%; margin-top: 6%'>
@@ -18,18 +19,46 @@
             <label for='desc'>Description: </label>
             <textarea type='text' name='desc' placeholder='Description' class='form-control'>{{post.desc}}</textarea>
         </div>
+        {% if post.media %}
         <div class='form-group'>
             <div class="row">
-                <div class="col-sm-6">
-                    <label for='image'>Image: </label>
-                    <input type='file' name='image' placeholder='Image'>
-                </div>
-                <div class="col-sm-6">
-                    <label for='curr_image'>Current image: </label>
-                    <img src='{{post.media.url}}' name='curr_image' style="width: 70%; height: 70%">
+                <div class="col">
+                    <label for='media'>Media File: </label>
+                    <input type='file' name='media' placeholder='media'>
                 </div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">Current media file</div>
+                        <div class="col">
+                            {% if post.media %}
+                            {% with post.media.url|split:"." as media_list %}
+                            {% if media_list|last == 'jpg' or media_list|last == 'jpeg' or media_list|last == 'png' or media_list|last == 'gif' or media_list|last == 'tiff' %}
+                            <img class="card-img-top" src="{{post.media.url}}" alt="Card image cap" width="75%"
+                                height="75%">
+                            {% elif media_list|last == 'mp4' or media_list|last == 'mkv' or media_list|last == 'mov' %}
+                            <video src="{{post.media.url}}" controls width="75%" height="100%"></video>
+                            {% endif %}
+                            {% endwith %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="button" class="btn btn-primary">Delete media file</button>
+                </div>
+            </div>
+
         </div>
+        {% else %}
+        <div class="form-group">
+            <label for='media'>Media: </label>
+            <input type='file' name='media' placeholder='Media'>
+        </div>
+        {% endif %}
         <div>
 
         </div>

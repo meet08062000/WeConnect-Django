@@ -16,11 +16,15 @@ urlpatterns = [
          name="post_delete"),
     path('comment_delete/<int:comment_id>', views.comment_delete,
          name="comment_delete"),
+    path('edit_comment/<int:comment_id>', views.edit_comment,
+         name="edit_comment"),
+    path('edit_reply/<int:reply_id>', views.edit_reply,
+         name="edit_reply"),
     path('reply_delete/<int:reply_id>', views.reply_delete,
          name="reply_delete"),
     path('editprofile', views.editprofile, name="editprofile"),
     path('bookmark', views.bookmark, name='bookmark'),
     path('comment/<int:post_id>', views.comment, name='comment'),
+    path('post_page/<int:post_id>', views.post_page, name='post_page'),
     path('reply/<int:post_id>/<int:comment_id>', views.reply, name='reply'),
-    path('post_page/<int:post_id>', views.post_page, name='post_page')
 ]

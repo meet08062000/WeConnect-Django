@@ -9,6 +9,7 @@ from django.db.models.query_utils import Q
 from mainApp.models import Bookmark, Comment, Reply
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+import json
 
 
 @login_required
@@ -393,3 +394,47 @@ def reply_delete(request, reply_id):
     if request.user == reply.user:
         reply.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def edit_comment(request, comment_id):
+    post_id = Comment.objects.filter(id=comment_id).get().post.id
+    if(request.method.lower() == 'post'):
+        # form_data = request.POST['formData']
+        # form_data_dict = {}
+        # form_data_list = json.loads(form_data)
+        # for field in form_data_list:
+        #     form_data_dict[field["name"]] = field["value"]
+        comment = Comment.objects.filter(id=comment_id).get()
+        comment.message = request.POST['message']
+        comment.save()
+        context = {
+            'comment': comment
+        }
+        if request.is_ajax():
+            html = render_to_string(
+                'mainApp/comment_section.html', context, request=request)
+            return JsonResponse({'form': html})
+    return redirect('post_page', post_id)
+
+
+@login_required
+def edit_reply(request, reply_id):
+    post_id = Reply.objects.filter(id=reply_id).get().comment.post.id
+    if(request.method.lower() == 'post'):
+        # form_data = request.POST['formData']
+        # form_data_dict = {}
+        # form_data_list = json.loads(form_data)
+        # for field in form_data_list:
+        #     form_data_dict[field["name"]] = field["value"]
+        reply = Reply.objects.filter(id=reply_id).get()
+        reply.message = request.POST['message']
+        reply.save()
+        context = {
+            'reply': reply
+        }
+        if request.is_ajax():
+            html = render_to_string(
+                'mainApp/reply_section.html', context, request=request)
+            return JsonResponse({'form': html})
+    return redirect('post_page', post_id)

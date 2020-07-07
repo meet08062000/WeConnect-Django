@@ -274,6 +274,30 @@
                 });
             });
 
+            /*$('#edit_comment_form').on('submit', function (event) {
+                event.preventDefault();
+                formData = $('#edit_comment_form').serializeArray();
+                formData = JSON.stringify(formData);
+                var pk = $('#edit_comment_submit').attr('value');
+                var url = "{% url 'edit_comment' 123 %}"
+                $.ajax({
+                    type: 'POST',
+                    url: url.replace('123', pk),
+                    data: {
+                        "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        "formData": formData
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#comment').html(response['form']);
+                        window.location.reload()
+                    },
+                    error: function (res, e) {
+                        console.log(res.responseText);
+                    }
+                });
+            });*/
+
         });
     </script>
 

@@ -5,103 +5,8 @@
     {% include 'mainApp/post_layout.html' %}
     <h3>Comments</h3>
     {% for comment in comments %}
-    <div class='p-3' style='background-color: #e6e6e6'>
-        <div class="row my-1">
-            <div class="col-1">
-                <img src="{{comment.user.profile.image.url}}" height="30" width="30" class="rounded-circle">
-            </div>
-            <div class="col-4">
-                <a href="{% url 'profile' comment.user.id %}"><b>{{comment.user.username}}</b></a>
-            </div>
-            <div class="col-7">
-                {% if comment.user_id == user.id %}
-                <div class="float-right d-inline">
-                    <button onclick='edit_comment(this.value)' value='{{comment.id}}' class="btn"><i
-                            class="fa fa-edit icon-4x"></i></button>
-                    <a href="/app/comment_delete/{{comment.id}}" type="submit"><i
-                            class="fa fa-trash pl-3 icon-4x"></i></a>
-                </div>
-                {% endif %}
-                <p class="float-right text-muted d-inline mr-3">{{comment.timestamp}}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col d-inline" name="{{comment.id}}">
-                <p class="mx-4">{{comment.message}}</p>
-            </div>
-            <div class="col d-none" name="{{comment.id}}">
-                <form action="" method='POST'>
-                    <textarea class="form-control d-inline" type="text">{{comment.message}}</textarea>
-                    <button type="submit" class='btn btn-dark d-inline'>Edit</button>
-                </form>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-1">
-                <div id="like-comment-section">
-                    {% include 'mainApp/like_comment_section.html' %}
-                </div>
-            </div>
-            <div class="col-8">
-                <div class='float-right mr-3' style='width: auto'>
-                    <button class="btn btn-outline-dark" role="button" aria-expanded="false" value="{{comment.id}}"
-                        onclick="reply(this.value)">Reply</button>
-                    <div class="float-right ml-2 d-none" id="{{comment.id}}">
-                        <form action="{% url 'reply' post_id=post.id comment_id=comment.id %}" method="post">
-                            {% csrf_token %}
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Comment" name='message'
-                                    aria-describedby="basic-addon2" required=true>
-                                <div class="input-group-append">
-                                    <button class="btn btn-dark" type="submit">Post</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <button class='btn btn-outline-dark float-right' value={{comment.id}}
-                    onclick="view_replies(this.value)">View Replies</button>
-            </div>
-            <div class="container-fluid d-none ml-5" name="{{comment.id}}">
-                {% for reply in comment.replies.all %}
-                <div class='p-3' style='background-color: #e6e6e6'>
-                    <div class="row my-1">
-                        <div class="col-1">
-                            <img src="{{reply.user.profile.image.url}}" height="30" width="30" class="rounded-circle">
-                        </div>
-                        <div class="col-4">
-                            <b>{{reply.user.username}}</b>
-                        </div>
-                        <div class="col-7">
-                            {% if comment.user_id == user.id %}
-                            <div class="float-right d-inline">
-                                <button onclick='edit_comment(this.value)' class="btn" value='{{comment.id}}'><i
-                                        class="fa fa-edit icon-4x"></i></button>
-                                <a href="/app/reply_delete/{{reply.id}}" type="submit"><i
-                                        class="fa fa-trash pl-3 icon-4x"></i></a>
-                            </div>
-                            {% endif %}
-                            <p class="float-right text-muted">{{reply.timestamp}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p class="mx-4">{{reply.message}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div id="like-reply-section">
-                            {% include 'mainApp/like_reply_section.html' %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
+    <div id="comment">
+        {% include 'mainApp/comment_section.html' %}
     </div>
     {% endfor %}
 </div>
@@ -123,6 +28,18 @@
     }
     function edit_comment(comment_id) {
         edit = document.getElementsByName(comment_id);
+        if (edit[0].classList.contains('d-none')) {
+            edit[0].classList.replace('d-none', 'd-inline');
+            edit[1].classList.replace('d-inline', 'd-none');
+        }
+        else if (edit[0].classList.contains('d-inline')) {
+            edit[0].classList.replace('d-inline', 'd-none');
+            edit[1].classList.replace('d-none', 'd-inline');
+        }
+    }
+
+    function edit_reply(reply_id) {
+        edit = document.getElementsByName(reply_id);
         if (edit[0].classList.contains('d-none')) {
             edit[0].classList.replace('d-none', 'd-inline');
             edit[1].classList.replace('d-inline', 'd-none');

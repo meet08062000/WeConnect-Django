@@ -276,11 +276,52 @@ def post_delete(request, post_id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
+
+
+def search_sort(unsorted, user):
+    if unsorted == []:
+        return []
+    print(user.follow.all())
+    following = [x for x in unsorted if user.follow.filter(
+        receiver=x, follower=user).count() != 0]
+    follower = [x for x in unsorted if user.receiver.filter(
+        follower=x, receiver=user).count() != 0]
+    unsorted = [x for x in unsorted if x not in following and x not in follower]
+    sorted = following + follower
+    # print(following)
+    # for i in following:
+    #     intermediate = search_sort(unsorted, i)
+    #     sorted += intermediate[0]
+    #     unsorted = intermediate[1]
+    # for i in follower:
+    #     (temp, unsorted) = search_sort(unsorted, i)
+    #     sorted += intermediate[0]
+    #     unsorted = intermediate[1]
+    # return sorted, unsorted
+    for i in following:
+        sorted += intersection(list(i.follow.all()), unsorted)
+    for i in following:
+        sorted += intersection(list(i.receiver.all()), unsorted)
+    for i in follower:
+        sorted += intersection(list(i.follow.all()), unsorted)
+    for i in follower:
+        sorted += intersection(list(i.receiver.all()), unsorted)
+    unsorted = [x for x in unsorted if x not in intersection(sorted, unsorted)]
+    sorted += unsorted
+    return sorted
+
+
 @login_required
 def search(request):
     search = request.GET['search']
-    results = User.objects.filter(Q(first_name__contains=search) | Q(
-        username__contains=search) | Q(last_name__contains=search) | Q(email__contains=search))
+    results = list(User.objects.filter(Q(first_name__contains=search) | Q(
+        username__contains=search) | Q(last_name__contains=search)))
+    if request.user in results:
+        results.remove(request.user)
+    results = search_sort(results, request.user)
     follow_list = []
     i = 0
     for user in results:

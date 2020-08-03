@@ -7,3 +7,4 @@
   4. CSS3
   5. BOOTSTRAP 4.0
   6. PostgreSQL
+  7. AJAX

@@ -11,7 +11,7 @@
   5. BOOTSTRAP 4.0
   6. PostgreSQL
   7. AJAX
-- NOTE  
+# NOTE  
 - 1. One can fork this project and use it as a base of your next project but copying it would be illegal, the project is protected by General Public License, 
      version 3(GPLv3).
 - 2. Also, Under which one cannot remove this Readme too and have to give credit to original authors Meet Turakhia and Meet Shah in their project which uses this project

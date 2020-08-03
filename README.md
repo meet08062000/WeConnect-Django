@@ -15,4 +15,4 @@
 #NOTE - 1. One can fork this project and use it as a base of your next project but copying it would be illegal, the project is protected by General Public License, 
         version 3(GPLv3).
         2. Under which one cannot remove this Readme too and have to give credit to original authors Meet Turakhia and Meet Shah.
-        (Read about General Public License, version 3(GPLv3) for more information).
+        (Read the license file in repository for more information).

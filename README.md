@@ -11,6 +11,12 @@
   5. BOOTSTRAP 4.0
   6. PostgreSQL
   7. AJAX
+# Features
+- Post interesting posts with support for videos, gifs and images.
+- like, comment, bookmark posts.
+- follow, unfollow system.
+- system register/login as well as option for google sign in.
+- profile page.
 # NOTE  
 - 1. One can fork this project and use it as a base of your next project but copying it would be illegal, the project is protected by General Public License, 
      version 3(GPLv3).
